@@ -8,7 +8,9 @@ module.exports = function(sequelize, Sequelize) {
         tensp: Sequelize.STRING,
         trangweb: Sequelize.STRING,
         macode: Sequelize.INTEGER,
-        giaweb: Sequelize.DECIMAL
+        giaweb: Sequelize.DECIMAL,
+        khoiluong: Sequelize.FLOAT,
+        ghichu: Sequelize.TEXT
     }, {
         freezeTableName: true,
         timestamps: false

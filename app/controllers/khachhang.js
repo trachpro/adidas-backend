@@ -11,6 +11,9 @@ module.exports = function (khachhang_model) {
             limit = limit < 1 || limit > 200 ? 10 : limit;
             khachhang_model.findAll({ offset: (page - 1) * limit, limit: limit }).then(data => {
                 res.json(data || []);
+            }, error => {
+
+                res.json({status: 0, message: "query errors", content: error});
             })
         },
         search: (req, res) => {
@@ -22,6 +25,9 @@ module.exports = function (khachhang_model) {
 
             khachhang_model.findAll({ offset: (page - 1) * limit, limit: limit, where: convert(req.body) }).then((datas) => {
                 res.json(datas || [])
+            }, error => {
+
+                res.json({status: 0, message: "query errors", content: error});
             });
         },
         get: (req, res) => {
@@ -29,6 +35,9 @@ module.exports = function (khachhang_model) {
             const id = req.params.id;
             khachhang_model.findById(id).then((data) => {
                 res.json({ "status": 1, "message": "successful", "data": data.dataValues });
+            }, error => {
+
+                res.json({status: 0, message: "query errors", content: error});
             });
         },
         insert: (req, res) => {
@@ -40,7 +49,8 @@ module.exports = function (khachhang_model) {
                     console.log("success ", data);
                     res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
                 }, error => {
-                    res.json({ status: 0, "message": "cannot create this" });
+
+                    res.json({status: 0, message: "query errors", content: error});
                 });
         },
         update: (req, res) => {
@@ -54,6 +64,9 @@ module.exports = function (khachhang_model) {
                     } else {
                         res.json({ "status": 1, "message": row + " row(s) updated" });
                     }
+                }, error => {
+
+                    res.json({status: 0, message: "query errors", content: error});
                 });
         },
         delete: (req, res) => {
@@ -66,6 +79,9 @@ module.exports = function (khachhang_model) {
                         res.json({ "status": 1, "message": rows + " row(s) affected" });
                     else
                         res.json({ "status": "300", "message": rows + " row(s) affected" });
+                }, error => {
+
+                    res.json({status: 0, message: "query errors", content: error});
                 });
         }
     }

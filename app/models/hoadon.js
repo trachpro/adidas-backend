@@ -8,7 +8,8 @@ module.exports = function(sequelize, Sequelize) {
         ngaygiao: Sequelize.DATE,
         datcoc: Sequelize.DECIMAL,
         trangthai: Sequelize.INTEGER,
-        makh: Sequelize.INTEGER
+        makh: Sequelize.INTEGER,
+        macheck: Sequelize.INTEGER
     }, {
         freezeTableName: true,
         timestamps: false
