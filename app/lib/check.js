@@ -10,7 +10,7 @@ function forGet(req, res) {
 
     if (req.decoded.maloainv != 1) {
 
-        if (req.params.id != req.decoded.makh) {
+        if (req.query.makh != req.decoded.makh && req.query.macheck != req.decoded.makh) {
 
             res.json({ status: 0, message: "you are not allowed to access this method!" });
         }

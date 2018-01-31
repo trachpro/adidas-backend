@@ -1,7 +1,7 @@
 var config = require('../../config/index'),
     Sequelize = require('sequelize'),
     sequelize = new Sequelize(config.db, config.user, config.pass, {
-        host: "127.0.0.1",
+        host: "localhost",
         dialect: config.dialect,
         port: config.db_port,
         // pool: {

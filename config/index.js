@@ -12,10 +12,10 @@ var config = {
         },
         port: port,
         dialect: 'mysql',
-        db: 'dbadidas',
+        db: 'DBADIDAS',
         db_port: 3306,
         user: 'root',
-        pass: ''
+        pass: 'anhyeuem123'
     },
 
     production: {
@@ -26,10 +26,10 @@ var config = {
         },
         port: port,
         dialect: 'mysql',
-        db: 'dbadidas',
+        db: 'DBADIDAS',
         db_port: 3306,
         user: 'root',
-        pass: ''
+        pass: 'anhyeuem123'
     }
 };
 
