@@ -12,7 +12,7 @@ var config = {
         },
         port: port,
         dialect: 'mysql',
-        db: 'DBADIDAS',
+        db: 'dbadidas',
         db_port: 3306,
         user: 'root',
         pass: 'anhyeuem123'
@@ -26,7 +26,7 @@ var config = {
         },
         port: port,
         dialect: 'mysql',
-        db: 'DBADIDAS',
+        db: 'dbadidas',
         db_port: 3306,
         user: 'root',
         pass: 'anhyeuem123'

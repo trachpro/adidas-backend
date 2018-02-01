@@ -4,7 +4,11 @@ module.exports = function (chitietdh_model) {
     return {
         list: (req, res) => {
 
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
 
             console.log("req body: ", req.body);
             var page = req.params.page ? parseInt(req.params.page) : 1;
@@ -20,7 +24,10 @@ module.exports = function (chitietdh_model) {
         },
         search: (req, res) => {
 
-            check.forTheOthers(req,res);
+            if(check.forTheOthers(req,res)) {
+
+                return;
+            } 
 
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
@@ -45,7 +52,11 @@ module.exports = function (chitietdh_model) {
             });
         },
         insert: (req, res) => {
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             chitietdh_model.create(convert(req.body)).then(
                 (data) => {
                     console.log("success ", data);
@@ -56,9 +67,14 @@ module.exports = function (chitietdh_model) {
                 });
         },
         update: (req, res) => {
-            check.forTheOthers(req,res);
+            if(check.forTheOthers(req,res)) {
+
+                return;
+            } 
             var params = convert(req.body);
-            chitietdh_model.update(params, { where: convert(req.body) })
+            var condition = convert(req.body);
+            delete condition.soluong;
+            chitietdh_model.update(params, { where: condition })
                 .then((row) => {
                     if (row > 0) {
                         res.json({ "status": 1, "message": row + " row(s) updated" });
@@ -71,7 +87,11 @@ module.exports = function (chitietdh_model) {
                 });
         },
         delete: (req, res) => {
-            check.onlyForAdmin(req, res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             chitietdh_model.destroy({
                 where: convert(req.body)
             })

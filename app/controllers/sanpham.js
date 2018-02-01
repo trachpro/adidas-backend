@@ -3,7 +3,7 @@ var check = require('../lib/check');
 module.exports = function (sanpham_model) {
     return {
         list: (req, res) => {
-            check.onlyForAdmin(req,res);
+            
             console.log("req body: ", req.body);
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
@@ -17,7 +17,7 @@ module.exports = function (sanpham_model) {
             })
         },
         search: (req, res) => {
-            check.onlyForAdmin(req,res);
+            
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
             page = page < 1 ? 1 : page;
@@ -31,7 +31,7 @@ module.exports = function (sanpham_model) {
             });
         },
         get: (req, res) => {
-            check.onlyForAdmin(req,res);
+            
             const id = req.params.id;
             sanpham_model.findById(id).then((data) => {
                 res.json({ "status": 1, "message": "successful", "data": data.dataValues });
@@ -42,7 +42,6 @@ module.exports = function (sanpham_model) {
         },
         insert: (req, res) => {
 
-            check.onlyForAdmin(req,res);
             sanpham_model.create(convert(req.body)).then(
                 (data) => {
                     console.log("success ", data);
@@ -53,7 +52,7 @@ module.exports = function (sanpham_model) {
                 });
         },
         update: (req, res) => {
-            check.onlyForAdmin(req,res);
+          
             var params = convert(req.body);
             sanpham_model.update(params, { where: { masp: req.params.id } })
                 .then((row) => {
@@ -68,7 +67,7 @@ module.exports = function (sanpham_model) {
                 });
         },
         delete: (req, res) => {
-            check.onlyForAdmin(req,res);
+           
             sanpham_model.destroy({
                 where: { masp: req.params.id }
             })

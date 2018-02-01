@@ -3,7 +3,11 @@ var check = require('../lib/check');
 module.exports = function (khachhang_model) {
     return {
         list: (req, res) => {
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             console.log("req body: ", req.body);
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
@@ -17,7 +21,11 @@ module.exports = function (khachhang_model) {
             })
         },
         search: (req, res) => {
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
             page = page < 1 ? 1 : page;
@@ -31,7 +39,14 @@ module.exports = function (khachhang_model) {
             });
         },
         get: (req, res) => {
-            check.forGet(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                if (req.params.id != req.decoded.makh) {
+        
+                    res.json({ status: 0, message: "you are not allowed to access this method!" });
+                    return;
+                }
+            }
             const id = req.params.id;
             khachhang_model.findById(id).then((data) => {
                 res.json({ "status": 1, "message": "successful", "data": data.dataValues });
@@ -41,7 +56,11 @@ module.exports = function (khachhang_model) {
             });
         },
         insert: (req, res) => {
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             console.log(req.body);
 
             khachhang_model.create(convert(req.body)).then(
@@ -54,7 +73,11 @@ module.exports = function (khachhang_model) {
                 });
         },
         update: (req, res) => {
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             console.log("request body: ", req.body);
             var params = convert(req.body);
             khachhang_model.update(params, { where: { makh: req.params.id } })
@@ -70,7 +93,11 @@ module.exports = function (khachhang_model) {
                 });
         },
         delete: (req, res) => {
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             khachhang_model.destroy({
                 where: { makh: req.params.id }
             })

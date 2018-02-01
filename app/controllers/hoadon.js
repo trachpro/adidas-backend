@@ -3,7 +3,11 @@ var check = require('../lib/check');
 module.exports = function (hoadon_model) {
     return {
         list: (req, res) => {
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             console.log("req body: ", req.body);
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
@@ -17,7 +21,11 @@ module.exports = function (hoadon_model) {
             })
         },
         search: (req, res) => {
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
             page = page < 1 ? 1 : page;
@@ -41,7 +49,11 @@ module.exports = function (hoadon_model) {
             });
         },
         insert: (req, res) => {
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
 
             hoadon_model.create(convert(req.body)).then(
                 (data) => {
@@ -53,8 +65,19 @@ module.exports = function (hoadon_model) {
                 });
         },
         update: (req, res) => {
-            check.forTheOthers(req,res);
+            if(check.forTheOthers(req,res)) {
+
+                return;
+            }
             var params = convert(req.body);
+            var data = {
+                mahd: req.params.id
+            };
+
+            if(req.decoded.maloainv != 1) {
+
+                data.mahd = req.body.makh;
+            }
             hoadon_model.update(params, { where: { mahd: req.params.id } })
                 .then((row) => {
                     if (row > 0) {
@@ -68,7 +91,11 @@ module.exports = function (hoadon_model) {
                 });
         },
         delete: (req, res) => {
-            check.onlyForAdmin(req, res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             hoadon_model.destroy({
                 where: { mahd: req.params.id }
             })

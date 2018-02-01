@@ -5,7 +5,11 @@ module.exports = function (chitietdh_model) {
     return {
         list: (req, res) => {
 
-            check.onlyForAdmin(req,res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
 
             console.log("req body: ", req.body);
             var page = req.params.page ? parseInt(req.params.page) : 1;
@@ -21,7 +25,11 @@ module.exports = function (chitietdh_model) {
         },
         search: (req, res) => {
 
-            check.hoaDonOnly(req,res);
+            console.log("chitiethoadon");
+            if(check.forTheOthers(req,res)) {
+
+                return;
+            }
 
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
@@ -36,17 +44,23 @@ module.exports = function (chitietdh_model) {
             });
         },
         get: (req, res) => {
-            check.forGet(req,res);
-            const id = req.params.id;
-            chitietdh_model.findAll(id).then((data) => {
-                res.json({ "status": 1, "message": "successful", "data": data.dataValues });
-            }, error => {
+            res.json({status: 0, message: "query errors"});
+            // check.forGet(req,res);
+            // const id = req.params.id;
+            // chitietdh_model.findAll(id).then((data) => {
+            //     res.json({ "status": 1, "message": "successful", "data": data.dataValues });
+            // }, error => {
 
-                res.json({status: 0, message: "query errors", content: error});
-            });
+            //     res.json({status: 0, message: "query errors", content: error});
+            // });
         },
         insert: (req, res) => {
-            check.onlyForAdmin(req,res);
+            console.log("chitiethoadon");
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
 
             chitietdh_model.create(convert(req.body)).then(
                 (data) => {
@@ -58,9 +72,14 @@ module.exports = function (chitietdh_model) {
                 });
         },
         update: (req, res) => {
-            check.forTheOthers(req,res);
+            if(check.forTheOthers(req,res)) {
+
+                return;
+            } 
             var params = convert(req.body);
-            chitietdh_model.update(params, { where: convert(req.body) })
+            var condition = convert(req.body);
+            delete condition.soluong;
+            chitietdh_model.update(params, { where: condition })
                 .then((row) => {
                     if (row > 0) {
                         res.json({ "status": 1, "message": row + " row(s) updated" });
@@ -70,7 +89,11 @@ module.exports = function (chitietdh_model) {
                 });
         },
         delete: (req, res) => {
-            check.onlyForAdmin(req, res);
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
             chitietdh_model.destroy({
                 where: convert(req.body)
             })

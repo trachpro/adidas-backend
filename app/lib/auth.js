@@ -26,11 +26,12 @@ module.exports = function(app, utils) {
 
             var token = req.body.token || req.query.token || req.headers['x-access-token'];
             if(token) {
+                console.log("token:: ", token);
                 jwt.verify(token, 'secret', function(err, decoded) {
 
                     if(err) {
 
-                        res.json({status: 0, message: 'fail to authenticate token!'});
+                        res.json({status: 0, message: 'fail to authenticate token!' + err});
                     } else {
 
                         req.decoded = decoded;
@@ -55,7 +56,7 @@ module.exports = function(app, utils) {
             login(req.body.sdt, req.body.mk, (data) => {
 
                 if(data) {
-
+                    // console.log("data: ", data);
                     var user = {
                         sdt: req.body.sdt,
                         mk: req.body.mk,
