@@ -2,11 +2,21 @@ var config = require('./config/index'),
     express = require('express'),
     db = require('./app/lib/db'),
     utils = require('./app/lib/utils')(config, db);
+var fs= require('fs'),
+    path = require('path');
 
 function init() {
 
     db.checkConnection(successHandle, errorHandle);
 }
+
+const httpsOptions = {
+    cert: fs.readFileSync(path.join(__dirname,'ssl','server.crt')),
+    key: fs.readFileSync(path.join(__dirname,'ssl','server.key')),
+}
+
+console.log("https: ", httpsOptions);
+
 
 function startServer() {
 
@@ -14,7 +24,7 @@ function startServer() {
     var model_list = utils.loadModels();
 
     var app = express(),
-        http = require('http').createServer(app);
+        http = require('https').createServer(httpsOptions,app);
     require('./config/express')(app, config)
     require('./config/routers')(app, utils, model_list);
 
