@@ -10,7 +10,7 @@ module.exports = function (app, utils, models, auth) {
         res.render('index')
     })
 
-    // Auth.load();
+    Auth.load();
 
 
     //set get default api
