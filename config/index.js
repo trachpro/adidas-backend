@@ -15,7 +15,7 @@ var config = {
         db: 'dbadidas',
         db_port: 3306,
         user: 'root',
-        pass: 'anhyeuem123'
+        pass: ''
     },
 
     production: {
@@ -29,7 +29,7 @@ var config = {
         db: 'dbadidas',
         db_port: 3306,
         user: 'root',
-        pass: 'anhyeuem123'
+        pass: ''
     }
 };
 
