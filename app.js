@@ -15,8 +15,6 @@ const httpsOptions = {
     key: fs.readFileSync(path.join(__dirname,'ssl','server.key')),
 }
 
-console.log("https: ", httpsOptions);
-
 
 function startServer() {
 
@@ -24,7 +22,7 @@ function startServer() {
     var model_list = utils.loadModels();
 
     var app = express(),
-        http = require('https').createServer(httpsOptions,app);
+        http = require('http').createServer(app);
     require('./config/express')(app, config)
     require('./config/routers')(app, utils, model_list);
 
