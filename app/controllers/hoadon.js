@@ -114,12 +114,12 @@ module.exports = function (hoadon_model) {
 
 function convert(src) {
 
-    var arr = ['mahd', 'ngaygiao', 'datcoc', 'trangthai', 'makh','macheck'];
+    var arr = ['mahd','madh','ngay', 'ngaygiao', 'datcoc', 'trangthai', 'makh','macheck','ship'];
     var des = {}
     arr.forEach(e => {
 
-        if (src[e]) {
-
+        if (src.hasOwnProperty(e)) {
+            if(!src[e]) src[e] = null;
             des[e] = src[e];
         }
     });

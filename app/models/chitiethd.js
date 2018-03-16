@@ -5,13 +5,17 @@ module.exports = function(sequelize, Sequelize) {
             autoIncrement: true,
             primaryKey: true
         },
-        masp: Sequelize.INTEGER,
+        masp: Sequelize.STRING,
         soluong: Sequelize.INTEGER,
-        ngaydat: Sequelize.DATE,
-        trangthai: Sequelize.INTEGER,
-        madh: Sequelize.INTEGER,
+        trangweb: Sequelize.STRING,
+        giaweb: Sequelize.STRING,
+        trietkhau: Sequelize.STRING,
+        khoiluong: Sequelize.STRING,
+        tigia: Sequelize.STRING,
+        giuhop: Sequelize.INTEGER,
         macheck: Sequelize.INTEGER,
-        makh: Sequelize.INTEGER
+        makh: Sequelize.INTEGER,
+        madh: Sequelize.INTEGER
     }, {
         freezeTableName: true,
         timestamps: false

@@ -5,7 +5,7 @@ module.exports = function(sequelize, Sequelize) {
             autoIncrement: true,
             primaryKey: true
         },
-        masp: Sequelize.INTEGER,
+        masp: Sequelize.STRING,
         soluong: Sequelize.INTEGER,
         macheck: Sequelize.INTEGER,
         makh: Sequelize.INTEGER

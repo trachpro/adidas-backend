@@ -1,19 +1,22 @@
 module.exports = function(sequelize, Sequelize) {
-    var donhang = sequelize.define('donhang', {
+    var hoadon = sequelize.define('hoadon', {
         mahd: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-        ngaygiao: Sequelize.DATE,
+        madh: Sequelize.INTEGER,
+        ngay: Sequelize.STRING,
+        ngaygiao: Sequelize.STRING,
         datcoc: Sequelize.DECIMAL,
         trangthai: Sequelize.INTEGER,
         makh: Sequelize.INTEGER,
-        macheck: Sequelize.INTEGER
+        macheck: Sequelize.INTEGER,
+        ship: Sequelize.STRING
     }, {
         freezeTableName: true,
         timestamps: false
     });
 
-    return donhang;
+    return hoadon;
 }

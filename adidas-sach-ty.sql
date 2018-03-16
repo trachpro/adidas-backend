@@ -1,152 +1,163 @@
-DROP DATABASE IF EXISTS DBADIDAS;
-CREATE DATABASE DBADIDAS;
-USE DBADIDAS;
+drop database if exists dbadidas;
+create database dbadidas;
+use dbadidas;
 
-CREATE TABLE LOAINHANVIEN(
-    MALOAINV INT AUTO_INCREMENT,
-    TENLOAINV NVARCHAR(50),
+create table loainhanvien(
+    maloainv int auto_increment,
+    tenloainv nvarchar(50),
 
-    CONSTRAINT LOAINHANVIEN_MALOAINV PRIMARY KEY (MALOAINV)
+    constraint loainhanvien_maloainv primary key (maloainv)
 );
 
-CREATE TABLE CHODUYETKH(
-    MAKH INT AUTO_INCREMENT,
-    TENKH NVARCHAR(50) NOT NULL,
-    SDT VARCHAR(13) NOT NULL,
-    DIACHI NVARCHAR(200) NOT NULL,
-    MK VARCHAR(20),
-    MALOAINV INT NOT NULL,
-    EMAIL VARCHAR(30),
+create table choduyetkh(
+    makh int auto_increment,
+    tenkh nvarchar(50) not null,
+    sdt varchar(13) not null,
+    diachi nvarchar(200) not null,
+    mk varchar(20),
+    maloainv int not null,
+    email varchar(30),
 
-    CONSTRAINT CHODUYETKH_MAKH PRIMARY KEY (MAKH),
-    CONSTRAINT CHODUYETKH_MALOAINV FOREIGN KEY (MALOAINV) REFERENCES LOAINHANVIEN (MALOAINV)
+    constraint choduyetkh_makh primary key (makh),
+    constraint choduyetkh_maloainv foreign key (maloainv) references loainhanvien (maloainv)
 );
 
-CREATE TABLE KHACHHANG(
-    MAKH INT AUTO_INCREMENT,
-    TENKH NVARCHAR(50) NOT NULL,
-    SDT VARCHAR(13) NOT NULL,
-    DIACHI NVARCHAR(200) NOT NULL,
-    MK VARCHAR(20),
-    MALOAINV INT NOT NULL,
-    EMAIL VARCHAR(30),
+create table khachhang(
+    makh int auto_increment,
+    tenkh nvarchar(50) not null,
+    sdt varchar(13) not null,
+    diachi nvarchar(200) not null,
+    mk varchar(20),
+    maloainv int not null,
+    email varchar(30),
 
-    CONSTRAINT KHACHHANG_MAKH PRIMARY KEY (MAKH),
-    CONSTRAINT KHACHHANG_MALOAINV FOREIGN KEY (MALOAINV) REFERENCES LOAINHANVIEN (MALOAINV)
-);
-
-
-CREATE TABLE TRIETKHAU(
-    MATK INT AUTO_INCREMENT,
-    NGAY DATE,
-    GIATRI FLOAT(2,2),
-
-    CONSTRAINT TRIETKHAU_MATK PRIMARY KEY (MATK)
-);
-
-CREATE TABLE SANPHAM(
-    MASP INT AUTO_INCREMENT,
-    MACODE VARCHAR(10) NOT NULL,
-    TENSP NVARCHAR(20),
-    TRANGWEB VARCHAR(200),
-    GIAWEB DECIMAL,
-    KHOILUONG FLOAT(3,3),
-    GHICHU TEXT,
-
-    CONSTRAINT SANPHAM_MASP PRIMARY KEY (MASP)
-);
-
-CREATE TABLE DONHANG(
-    MADH INT AUTO_INCREMENT,
-    NGAY DATE,
-    TIENYEN DECIMAL,
-    TIGIA DECIMAL,
-    TRANGTHAI INT NOT NULL,
-    GHICHU TEXT,
-    MAKH INT NOT NULL,
-
-    CONSTRAINT DONHANG_MADH PRIMARY KEY (MADH),
-    CONSTRAINT DONHANG_MAKH FOREIGN KEY (MAKH) REFERENCES KHACHHANG (MAKH)
-);
-
-CREATE TABLE CHITIETDH(
-    MADH INT,
-    MASP INT,
-    SOLUONG INT,
-    MACHECK INT,
-    MAKH INT NOT NULL,
-
-    CONSTRAINT CHITIETDH_MADH_MASP PRIMARY KEY (MADH, MASP),
-    CONSTRAINT CHITIETDH_MADH FOREIGN KEY (MADH) REFERENCES DONHANG (MADH),
-    CONSTRAINT CHITIETDH_MASP FOREIGN KEY (MASP) REFERENCES SANPHAM (MASP),
-    CONSTRAINT CHITIETDH_MACHECK FOREIGN KEY (MACHECK) REFERENCES KHACHHANG (MAKH),
-    CONSTRAINT CHITIETDH_MAKH FOREIGN KEY (MAKH) REFERENCES KHACHHANG (MAKH)
-);
-
-CREATE TABLE HOADON(
-    MAHD INT AUTO_INCREMENT,
-    NGAYGIAO DATE,
-    MAKH INT NOT NULL,
-    TRANGTHAI INT,
-    DATCOC DECIMAL,
-    MACHECK INT,
-
-    CONSTRAINT HOADON_MAHD PRIMARY KEY (MAHD),
-    CONSTRAINT HOADON_MAHK FOREIGN KEY (MAKH) REFERENCES KHACHHANG (MAKH),
-    CONSTRAINT HOADON_MACHECK FOREIGN KEY (MACHECK) REFERENCES KHACHHANG (MAKH)
-);
-
-CREATE TABLE CHITIETHD(
-    MAHD INT,
-    MASP INT,
-    SOLUONG INT,
-    NGAYDAT DATE,
-    TRANGTHAI INT,
-    MADH INT,
-    MACHECK INT,
-    MAKH INT,
-
-    CONSTRAINT CHITIETHD_MAHD_MASP PRIMARY KEY (MAHD, MASP),
-    CONSTRAINT CHITIETHD_MAHD FOREIGN KEY (MAHD) REFERENCES HOADON (MAHD),
-    CONSTRAINT CHITIETHD_MASP FOREIGN KEY (MASP) REFERENCES SANPHAM (MASP),
-    CONSTRAINT CHITIETHD_MADH FOREIGN KEY (MADH) REFERENCES DONHANG (MADH),
-    CONSTRAINT CHITIETHD_MAKH FOREIGN KEY (MAKH) REFERENCES KHACHHANG (MAKH),
-    CONSTRAINT CHITIETHD_MACHECK FOREIGN KEY (MACHECK) REFERENCES KHACHHANG (MAKH)
+    constraint khachhang_makh primary key (makh),
+    constraint khachhang_maloainv foreign key (maloainv) references loainhanvien (maloainv)
 );
 
 
+create table trietkhau(
+    matk int auto_increment,
+    ngay date,
+    giatri float(2,2),
 
-INSERT INTO `LOAINHANVIEN` (`MALOAINV`, `TENLOAINV`) VALUES
-(1, 'ADMIN'),
-(2, 'KHACHHANG'),
-(3, 'KHACHBUON'),
-(4, 'NGUOIMUA'),
-(5, 'SHIPPER');
-INSERT INTO `KHACHHANG` (`MAKH`, `TENKH`, `SDT`, `DIACHI`, `MK`, `MALOAINV`, `EMAIL`) VALUES
-(1, 'ADMIN', '1234', 'XUÂN TRƯỜNG - NAM ĐỊNH', 'NOPASS', 1, 'TRACHPRO'),
-(2, 'KHACHHANG', '222', 'XÓM 2 - XUÂN DỤC - XUÂN NINH', 'NOPASS', 2, 'VÃI LÚA'),
-(3, 'KHACHBUON', '333', 'XÓM 2 - XUÂN DỤC - XUÂN NINH', 'NOPASS', 3, 'VÃI LÚA'),
-(4, 'NGUOIMUA', '444', 'XÓM 2 - XUÂN DỤC - XUÂN NINH', 'NOPASS', 4, 'VÃI LÚA'),
-(5, 'SHIPPER', '555', 'XÓM 2 - XUÂN DỤC - XUÂN NINH', 'NOPASS', 5, 'VÃI LÚA');
+    constraint trietkhau_matk primary key (matk)
+);
 
-INSERT INTO `TRIETKHAU` (`MATK`,`NGAY`,`GIATRI`) VALUES
+create table sanpham(
+    masp int auto_increment,
+    macode varchar(10) not null,
+    tensp nvarchar(20),
+    trangweb varchar(200),
+    giaweb decimal,
+    khoiluong float(3,3),
+    ghichu text,
+
+    constraint sanpham_masp primary key (masp)
+);
+
+create table donhang(
+    madh int auto_increment,
+    ngay varchar(20),
+    tienyen varchar(30),
+    datcoc varchar(30),
+    taikhoan varchar(30),
+    thuonghieu nvarchar(20),
+    tigia varchar(30),
+    trangthai int not null,
+    ghichu text,
+    macheck int,
+    makh int not null,
+
+    constraint donhang_madh primary key (madh),
+    constraint donhang_makh foreign key (makh) references khachhang (makh)
+);
+
+create table chitietdh(
+    madh int,
+    masp varchar(10),
+    soluong int,
+    macheck int,
+    makh int not null,
+
+    constraint chitietdh_madh_masp primary key (madh, masp),
+    constraint chitietdh_madh foreign key (madh) references donhang (madh),
+    constraint chitietdh_macheck foreign key (macheck) references khachhang (makh),
+    constraint chitietdh_makh foreign key (makh) references khachhang (makh)
+);
+
+create table hoadon(
+    mahd int auto_increment,
+    madh int,
+    ngay varchar(10),
+    ngaygiao varchar(10),
+    makh int not null,
+    trangthai int,
+    datcoc varchar(20),
+    ship varchar(20),
+    macheck int,
+
+    constraint hoadon_mahd primary key (mahd),
+    constraint hoadon_mahk foreign key (makh) references khachhang (makh),
+    constraint hoadon_macheck foreign key (macheck) references khachhang (makh),
+    constraint hoadon_madh foreign key (madh) references donhang (madh)
+);
+
+create table chitiethd(
+    mahd int,
+    masp varchar(10),
+    soluong int,
+    trangweb varchar(30),
+    giaweb varchar(20),
+    trietkhau varchar(10),
+    khoiluong varchar(10),
+    tigia varchar(10),
+    macheck int,
+    makh int,
+    giuhop int,
+    madh int,
+
+    constraint chitiethd_mahd_masp primary key (mahd, masp),
+    constraint chitiethd_mahd foreign key (mahd) references hoadon (mahd),
+    constraint chitiethd_makh foreign key (makh) references khachhang (makh),
+    constraint chitiethd_macheck foreign key (macheck) references khachhang (makh),
+    constraint chitiethd_madhforeign foreign key (madh) references donhang (madh)
+);
+
+
+
+insert into `loainhanvien` (`maloainv`, `tenloainv`) values
+(1, 'admin'),
+(2, 'khachhang'),
+(3, 'khachbuon'),
+(4, 'nguoimua'),
+(5, 'shipper'),
+(6, 'nguoinhan');
+insert into `khachhang` (`makh`, `tenkh`, `sdt`, `diachi`, `mk`, `maloainv`, `email`) values
+(1, 'admin', '1234', 'xuân trường - nam định', 'nopass', 1, 'trachpro'),
+(2, 'khachhang', '222', 'xóm 2 - xuân dục - xuân ninh', 'nopass', 2, 'vãi lúa'),
+(3, 'khachbuon', '333', 'xóm 2 - xuân dục - xuân ninh', 'nopass', 3, 'vãi lúa'),
+(4, 'nguoimua', '444', 'xóm 2 - xuân dục - xuân ninh', 'nopass', 4, 'vãi lúa'),
+(5, 'shipper', '555', 'xóm 2 - xuân dục - xuân ninh', 'nopass', 5, 'vãi lúa');
+
+insert into `trietkhau` (`matk`,`ngay`,`giatri`) values
 (1, '2018-01-01',0.5);
 
-INSERT INTO `SANPHAM` (`MASP`, `MACODE`, `TENSP`, `TRANGWEB`, `GIAWEB`,`KHOILUONG`,`GHICHU`) VALUES
-(1, 'E00', 'DIENTHOAI', 'HTTP', 123,0,'SAN PHAM NAY RAT TUYET VOI'),
-(2, 'E01', 'DEP', 'HTTPS', 123,0,'SAN PHAM NAY RAT TUYET VOIT'),
-(3, 'E02', 'DAY', 'HTTPSS', 123,0,'SAN PHAM NAY RAT TUYET VOIG');
+insert into `sanpham` (`masp`, `macode`, `tensp`, `trangweb`, `giaweb`,`khoiluong`,`ghichu`) values
+(1, 'e00', 'dienthoai', 'http', 123,0,'san pham nay rat tuyet voi'),
+(2, 'e01', 'dep', 'https', 123,0,'san pham nay rat tuyet voit'),
+(3, 'e02', 'day', 'httpss', 123,0,'san pham nay rat tuyet voig');
 
-INSERT INTO `DONHANG` (`MADH`, `NGAY`, `TIENYEN`, `TIGIA`, `TRANGTHAI`, `GHICHU`, `MAKH`) VALUES
-(1, '2018-01-01', '12', '12', 5, 'KHÔNG CÓ GHI CHÚ J', 4);
+insert into `donhang` (`madh`, `ngay`, `tienyen`, `tigia`, `trangthai`, `ghichu`, `makh`,`macheck`,`taikhoan`,`thuonghieu`,`datcoc`) values
+(1, '2018-01-01', '5.2', '201', 5, 'không có ghi chú j', 4, 4,'adidas2018','adidas','2000000');
 
-INSERT INTO `CHITIETDH` (`MADH`, `MASP`, `SOLUONG`,`MACHECK`,`MAKH`) VALUES
-(1, 1, 2, 4, 2),
-(1, 2, 44, 4, 2);
+insert into `chitietdh` (`madh`, `masp`, `soluong`,`macheck`,`makh`) values
+(1, "MK20112", 2, 4, 2),
+(1, "ZR3311", 44, 4, 2);
 
-INSERT INTO `HOADON` (`MAHD`, `NGAYGIAO`, `MAKH`, `TRANGTHAI`, `DATCOC`,`MACHECK`) VALUES
-(1, '2018-01-10', 2, 0, '12', 5);
+insert into `hoadon` (`mahd`, `ngay`,`ngaygiao`, `makh`, `trangthai`, `datcoc`,`macheck`,`ship`) values
+(1, '2018-01-10',null, 2, 0, '12', 5,'10000');
 
-INSERT INTO `CHITIETHD` (`MAHD`, `MASP`, `SOLUONG`, `NGAYDAT`, `TRANGTHAI`,`MACHECK`,`MADH`) VALUES
-(1, 1, 2, '2018-01-02', 5, 5,1),
-(1, 2, 4, '2018-01-05', 5, 5,1); 
+insert into `chitiethd` (`mahd`, `masp`, `soluong`, `trangweb`,`giaweb`,`trietkhau`,`khoiluong`,`tigia`,`macheck`,`makh`,`giuhop`,`madh`) values
+(1, "ECT123", 2, 'adidas', '5000','100', '3','216',2,2,1,1),
+(1, "TD-321", 4, 'adidas', '5000','100', '3','216',2,2,3,1); 

@@ -22,8 +22,14 @@ module.exports = function (app, utils, models, auth) {
         app.get('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].get); // get by id
         app.post('/api/' + name, ctrls[name].insert); // insert
         app.post('/api/' + name + '/search', ctrls[name].search); // search
-        app.put('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].update); // update
-        app.delete('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].delete); // delete
+       
+        if(name != 'chitiethd' && name != 'chitietdh') {
+            app.delete('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].delete); // delete
+            app.put('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].update); // update
+        } else {
+            app.delete('/api/' + name + '/:id([0-9a-f]+)/:id2', ctrls[name].delete); // delete
+            app.put('/api/' + name + '/:id([0-9a-f]+)/:id2', ctrls[name].update); // update
+        }
     });
 
     //app.post('/api/auth', auth.load);

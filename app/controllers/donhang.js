@@ -123,7 +123,7 @@ module.exports = function (donhang_model) {
 
 function convert(src) {
 
-    var arr = ['madh', 'ngay', 'tienyen', 'tigia', 'trangthai', 'ghichu', 'makh'];
+    var arr = ['madh', 'ngay', 'tienyen','datcoc','taikhoan','thuonghieu', 'tigia', 'trangthai', 'ghichu','macheck', 'makh', 'tendh'];
     var des = {}
     arr.forEach(e => {
 

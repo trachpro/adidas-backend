@@ -77,9 +77,10 @@ module.exports = function (chitietdh_model) {
                 return;
             } 
             var params = convert(req.body);
-            var condition = convert(req.body);
-            delete condition.soluong;
-            chitietdh_model.update(params, { where: condition })
+            chitietdh_model.update(params, { where: {
+                mahd: req.params.id,
+                masp: req.params.id2
+            } })
                 .then((row) => {
                     if (row > 0) {
                         res.json({ "status": 1, "message": row + " row(s) updated" });
@@ -95,7 +96,10 @@ module.exports = function (chitietdh_model) {
                 return;
             }
             chitietdh_model.destroy({
-                where: convert(req.body)
+                where: {
+                    mahd: req.params.id,
+                    masp: req.params.id2
+                }
             })
                 .then(rows => {
                     if (rows > 0)
@@ -112,7 +116,7 @@ module.exports = function (chitietdh_model) {
 
 function convert(src) {
 
-    var arr = ['mahd', 'masp', 'soluong', 'ngaydat', 'trangthai', 'madh','macheck','makh'];
+    var arr = ['mahd', 'masp', 'soluong', 'trangweb', 'giaweb','trietkhau','khoiluong','tigia', 'giuhop','macheck','makh','madh'];
     var des = {}
     arr.forEach(e => {
 
