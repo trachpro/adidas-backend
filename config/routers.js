@@ -23,7 +23,7 @@ module.exports = function (app, utils, models, auth) {
         app.post('/api/' + name, ctrls[name].insert); // insert
         app.post('/api/' + name + '/search', ctrls[name].search); // search
        
-        if(name != 'chitiethd' && name != 'chitietdh') {
+        if(name != 'chitiethd' && name != 'chitietdh' && name != 'chitietnh') {
             app.delete('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].delete); // delete
             app.put('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].update); // update
         } else {
