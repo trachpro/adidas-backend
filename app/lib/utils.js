@@ -38,9 +38,9 @@ module.exports = function(config, db) {
         return require(CTRL_PATH + '/' + name);
     }
 
-    obj.loadControllerFromModel = function(name, model) {
+    obj.loadControllerFromModel = function(name, model,subModel) {
 
-        return require(CTRL_PATH + '/' + name)(model);
+        return subModel? require(CTRL_PATH + '/' + name)(model, subModel): require(CTRL_PATH + '/' + name)(model);
     }
 
     obj.loadControllers = function(models) {
@@ -52,7 +52,17 @@ module.exports = function(config, db) {
             if(file.indexOf('.js') > 0) {
 
                 var name = file.replace('.js','');
-                ctrls[name] = obj.loadControllerFromModel(name, models[name]);
+                var subName = null;
+                
+                switch(name) {
+                    
+                    case "chitietdh": subName = "donhang"; break;
+                    case "chitiethd": subName = "hoadon"; break;
+                    case "chitietnh": subName = "nhanhang"; break;
+                    default: subName = null;
+                }
+                
+                ctrls[name] = obj.loadControllerFromModel(name, models[name],models[subName]);
             }
         })
 

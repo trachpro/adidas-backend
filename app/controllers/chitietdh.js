@@ -1,6 +1,6 @@
 var check = require('../lib/check');
 
-module.exports = function (chitietdh_model) {
+module.exports = function (chitietdh_model, donhang_model) {
     return {
         list: (req, res) => {
 
@@ -10,12 +10,14 @@ module.exports = function (chitietdh_model) {
                 return;
             }
 
-            console.log("req body: ", req.body);
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
+            
             page = page < 1 ? 1 : page;
             limit = limit < 1 || limit > 200 ? 10 : limit;
+            
             chitietdh_model.findAll({ offset: (page - 1) * limit, limit: limit }).then(data => {
+                
                 res.json(data || []);
             }, error => {
 
@@ -23,23 +25,50 @@ module.exports = function (chitietdh_model) {
             })
         },
         search: (req, res) => {
-
-            if(check.forTheOthers(req,res)) {
-
-                return;
-            } 
-
+            
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
             page = page < 1 ? 1 : page;
             limit = limit < 1 || limit > 200 ? 10 : limit;
+            
+            if(req.decoded.maloainv != 1 && !req.body.madh) {
+                
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            } else if(req.decoded.maloainv != 1) {
+                
+                donhang_model.findById(req.body.madh).then( data => {
+                    
+                    if(req.decoded.makh != data.makh) {
+                        
+                        res.json({ status: 0, message: "this detail doesn't belong to you!" });
+                    } else {
+                        
+                        chitietdh_model.findAll({ offset: (page - 1) * limit, limit: limit, where: convert(req.body) }).then((datas) => {
+                            res.json(datas || [])
+                        }, error => {
+            
+                            res.json({status: 0, message: "query errors", content: error});
+                        });
+                    }
+                    
+                }, error => {
+                    
+                    res.json({status: 0, message: "query errors", content: error});
+                })
+            } else {
+                
+                chitietdh_model.findAll({ offset: (page - 1) * limit, limit: limit, where: convert(req.body) }).then((datas) => {
+                    res.json(datas || [])
+                }, error => {
+    
+                    res.json({status: 0, message: "query errors", content: error});
+                });
+            }
 
-            chitietdh_model.findAll({ offset: (page - 1) * limit, limit: limit, where: convert(req.body) }).then((datas) => {
-                res.json(datas || [])
-            }, error => {
+            
 
-                res.json({status: 0, message: "query errors", content: error});
-            });
+            
         },
         get: (req, res) => {
             check.forGet(req,res);
