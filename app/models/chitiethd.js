@@ -13,8 +13,6 @@ module.exports = function(sequelize, Sequelize) {
         khoiluong: Sequelize.STRING,
         tigia: Sequelize.STRING,
         giuhop: Sequelize.INTEGER,
-        macheck: Sequelize.INTEGER,
-        makh: Sequelize.INTEGER,
         madh: Sequelize.INTEGER
     }, {
         freezeTableName: true,

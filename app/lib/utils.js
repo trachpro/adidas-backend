@@ -44,6 +44,13 @@ module.exports = function(config, db) {
     }
 
     obj.loadControllers = function(models) {
+        
+        models.chitietdh.belongsTo(models.donhang, {foreignKey: 'madh'});
+        models.donhang.hasMany(models.chitietdh, {foreignKey: 'madh'});
+        models.chitiethd.belongsTo(models.hoadon, {foreignKey: 'mahd'});
+        models.hoadon.hasMany(models.chitiethd, {foreignKey: 'mahd'});
+        models.chitietnh.belongsTo(models.chitietnh, {foreignKey: 'manh'});
+        models.nhanhang.hasMany(models.chitietnh, {foreignKey: 'manh'});
 
         var ctrls = {};
 

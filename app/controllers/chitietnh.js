@@ -1,7 +1,7 @@
 var check = require('../lib/check');
 
 
-module.exports = function (chitietdh_model) {
+module.exports = function (chitietnh_model, nhanhang_model) {
     return {
         list: (req, res) => {
 
@@ -16,7 +16,7 @@ module.exports = function (chitietdh_model) {
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
             page = page < 1 ? 1 : page;
             limit = limit < 1 || limit > 200 ? 10 : limit;
-            chitietdh_model.findAll({ offset: (page - 1) * limit, limit: limit }).then(data => {
+            chitietnh_model.findAll({ offset: (page - 1) * limit, limit: limit }).then(data => {
                 res.json(data || []);
             }, error => {
 
@@ -25,34 +25,30 @@ module.exports = function (chitietdh_model) {
         },
         search: (req, res) => {
 
-            console.log("chitiethoadon");
-            if(check.forTheOthers(req,res)) {
-
-                return;
-            }
-
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
             page = page < 1 ? 1 : page;
             limit = limit < 1 || limit > 200 ? 10 : limit;
-
-            chitietdh_model.findAll({ offset: (page - 1) * limit, limit: limit, where: convert(req.body) }).then((datas) => {
-                res.json(datas || [])
+            
+            if(req.decoded.maloainv != 1) {
+                
+                if(!req.body.makh || req.body.makh != req.decoded.makh) {
+                    
+                    res.json({status: 0, message: "invalid params"});
+                    return;
+                }
+            } 
+            
+            nhanhang_model.findAll({raw: true, offset: (page - 1) * limit, limit: limit,where: convert(req.body), include:[{model:chitietnh_model, required: false}]}).then((datas) => {
+                            
+                res.json(datas || []);
             }, error => {
-
+            
                 res.json({status: 0, message: "query errors", content: error});
             });
         },
         get: (req, res) => {
             res.json({status: 0, message: "query errors"});
-            // check.forGet(req,res);
-            // const id = req.params.id;
-            // chitietdh_model.findAll(id).then((data) => {
-            //     res.json({ "status": 1, "message": "successful", "data": data.dataValues });
-            // }, error => {
-
-            //     res.json({status: 0, message: "query errors", content: error});
-            // });
         },
         insert: (req, res) => {
             
@@ -62,7 +58,7 @@ module.exports = function (chitietdh_model) {
                 return;
             }
 
-            chitietdh_model.create(convert(req.body)).then(
+            chitietnh_model.create(convert(req.body)).then(
                 (data) => {
                     console.log("success ", data);
                     res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
@@ -77,7 +73,7 @@ module.exports = function (chitietdh_model) {
                 return;
             } 
             var params = convert(req.body);
-            chitietdh_model.update(params, { where: {
+            chitietnh_model.update(params, { where: {
                 manh: req.params.id,
                 madh: req.params.id2
             } })
@@ -95,7 +91,7 @@ module.exports = function (chitietdh_model) {
                 res.json({ status: 0, message: "you are not allowed to access this method!" });
                 return;
             }
-            chitietdh_model.destroy({
+            chitietnh_model.destroy({
                 where: {
                     manh: req.params.id,
                     madh: req.params.id2
@@ -116,7 +112,7 @@ module.exports = function (chitietdh_model) {
 
 function convert(src) {
 
-    var arr = ['manh', 'madh', 'soluong', 'phuphi','trangthai','khoiluong','makh'];
+    var arr = ['manh', 'madh', 'soluong', 'phuphi','trangthai','khoiluong'];
     var des = {}
     arr.forEach(e => {
 

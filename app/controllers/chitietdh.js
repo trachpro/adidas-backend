@@ -31,44 +31,22 @@ module.exports = function (chitietdh_model, donhang_model) {
             page = page < 1 ? 1 : page;
             limit = limit < 1 || limit > 200 ? 10 : limit;
             
-            if(req.decoded.maloainv != 1 && !req.body.madh) {
+            if(req.decoded.maloainv != 1) {
                 
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
-            } else if(req.decoded.maloainv != 1) {
-                
-                donhang_model.findById(req.body.madh).then( data => {
+                if(!req.body.makh || req.body.makh != req.decoded.makh) {
                     
-                    if(req.decoded.makh != data.makh) {
-                        
-                        res.json({ status: 0, message: "this detail doesn't belong to you!" });
-                    } else {
-                        
-                        chitietdh_model.findAll({ offset: (page - 1) * limit, limit: limit, where: convert(req.body) }).then((datas) => {
-                            res.json(datas || [])
-                        }, error => {
+                    res.json({status: 0, message: "invalid params"});
+                    return;
+                }
+            } 
             
-                            res.json({status: 0, message: "query errors", content: error});
-                        });
-                    }
-                    
-                }, error => {
-                    
-                    res.json({status: 0, message: "query errors", content: error});
-                })
-            } else {
-                
-                chitietdh_model.findAll({ offset: (page - 1) * limit, limit: limit, where: convert(req.body) }).then((datas) => {
-                    res.json(datas || [])
-                }, error => {
-    
-                    res.json({status: 0, message: "query errors", content: error});
-                });
-            }
-
+            donhang_model.findAll({raw: true, offset: (page - 1) * limit, limit: limit,where: convert(req.body), include:[{model:chitietdh_model, required: false}]}).then((datas) => {
+                            
+                res.json(datas || []);
+            }, error => {
             
-
-            
+                res.json({status: 0, message: "query errors", content: error});
+            });
         },
         get: (req, res) => {
             check.forGet(req,res);
@@ -106,11 +84,8 @@ module.exports = function (chitietdh_model, donhang_model) {
                 masp: req.params.id2
             } })
                 .then((row) => {
-                    if (row > 0) {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    } else {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    }
+                    
+                    res.json({ "status": 1, "message": row + " row(s) updated" });
                 }, error => {
 
                     res.json({status: 0, message: "query errors", content: error});
@@ -143,7 +118,7 @@ module.exports = function (chitietdh_model, donhang_model) {
 
 function convert(src) {
 
-    var arr = ['madh', 'masp', 'soluong', 'makh','macheck'];
+    var arr = ['madh', 'masp', 'soluong'];
     var des = {}
     arr.forEach(e => {
 

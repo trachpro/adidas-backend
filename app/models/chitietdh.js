@@ -7,8 +7,7 @@ module.exports = function(sequelize, Sequelize) {
         },
         masp: Sequelize.STRING,
         soluong: Sequelize.INTEGER,
-        macheck: Sequelize.INTEGER,
-        makh: Sequelize.INTEGER
+        giuhop: Sequelize.INTEGER
     }, {
         freezeTableName: true,
         timestamps: false

@@ -3,7 +3,6 @@ module.exports = function(sequelize, Sequelize) {
         manh: {
             type: Sequelize.INTEGER
         },
-        makh: Sequelize.INTEGER,
         madh: Sequelize.INTEGER,
         soluong: Sequelize.INTEGER,
         phuphi: Sequelize.DECIMAL,
