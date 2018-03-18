@@ -11,7 +11,8 @@ module.exports = function(sequelize, Sequelize) {
         trangthai: Sequelize.INTEGER,
         khoiluong: Sequelize.FLOAT,
         dongia: Sequelize.INTEGER,
-        ghichu: Sequelize.TEXT
+        ghichu: Sequelize.TEXT,
+        datcoc: Sequelize.DECIMAL
     }, {
         freezeTableName: true,
         timestamps: false

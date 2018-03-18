@@ -76,13 +76,12 @@ module.exports = function (chitietnh_model, nhanhang_model) {
             chitietnh_model.update(params, { where: {
                 manh: req.params.id,
                 madh: req.params.id2
-            } })
-                .then((row) => {
-                    if (row > 0) {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    } else {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    }
+            } }).then((row) => {
+                    
+                    res.json({ "status": 1, "message": row + " row(s) updated" });
+            }, error => {
+
+                    res.json({status: 0, message: "query errors", content: error});
                 });
         },
         delete: (req, res) => {
@@ -96,12 +95,9 @@ module.exports = function (chitietnh_model, nhanhang_model) {
                     manh: req.params.id,
                     madh: req.params.id2
                 }
-            })
-                .then(rows => {
-                    if (rows > 0)
-                        res.json({ "status": 1, "message": rows + " row(s) affected" });
-                    else
-                        res.json({ "status": "300", "message": rows + " row(s) affected" });
+            }).then(rows => {
+                    
+                    res.json({ "status": 1, "message": rows + " row(s) affected" });
                 }, error => {
 
                     res.json({status: 0, message: "query errors", content: error});
@@ -112,7 +108,7 @@ module.exports = function (chitietnh_model, nhanhang_model) {
 
 function convert(src) {
 
-    var arr = ['manh', 'madh', 'soluong', 'phuphi','trangthai','khoiluong'];
+    var arr = ['manh', 'madh', 'soluong','khoiluong','giuhop'];
     var des = {}
     arr.forEach(e => {
 

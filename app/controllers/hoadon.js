@@ -39,7 +39,13 @@ module.exports = function (hoadon_model) {
             });
         },
         get: (req, res) => {
-            check.forGet(req,res);
+            
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
+            
             const id = req.params.id;
             hoadon_model.findById(id).then((data) => {
                 res.json({ "status": 1, "message": "successful", "data": data.dataValues });
@@ -65,10 +71,13 @@ module.exports = function (hoadon_model) {
                 });
         },
         update: (req, res) => {
-            if(check.forTheOthers(req,res)) {
+            
+            if (req.decoded.maloainv != 1) {
 
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
                 return;
             }
+            
             var params = convert(req.body);
             var data = {
                 mahd: req.params.id
@@ -114,7 +123,7 @@ module.exports = function (hoadon_model) {
 
 function convert(src) {
 
-    var arr = ['mahd','madh','ngay', 'ngaygiao', 'datcoc', 'trangthai', 'makh','macheck','ship'];
+    var arr = ['mahd','madh','ngay', 'ngaygiao', 'datcoc', 'trangthai', 'makh','ship', 'thuonghieu'];
     var des = {}
     arr.forEach(e => {
 

@@ -12,7 +12,7 @@ module.exports = function(app, utils) {
             console.log(JSON.stringify(user));
             if(user[0] == null) {
 
-                model.findAll({where: {sdt: uid, mk: pass}}).then( cdUser => {
+                model2.findAll({where: {sdt: uid, mk: pass}}).then( cdUser => {
 
                     if(cdUser[0]) {
 
@@ -72,7 +72,8 @@ module.exports = function(app, utils) {
                         sdt: req.body.sdt,
                         mk: req.body.mk,
                         maloainv: data.maloainv,
-                        makh: data.makh
+                        makh: data.makh,
+                        maduyetkh: data.maduyetkh
                     }
 
                     var token = jwt.sign(user, 'secret', {expiresIn: 60 * 60});
@@ -83,7 +84,7 @@ module.exports = function(app, utils) {
                     })
                 } else {
 
-                    res.json({status: false})
+                    res.json({status: 0})
                 }
             })
         })

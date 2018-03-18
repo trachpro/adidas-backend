@@ -11,8 +11,8 @@ var express = require('express')
     , addrs = []
 
 // Set config.host ip
-for (k in interfaces) {
-    for (k2 in interfaces[k]) {
+for (let k in interfaces) {
+    for (let k2 in interfaces[k]) {
         var address = interfaces[k][k2]
         if (address.family == 'IPv4' && !address.internal)
             addrs.push(address.address)

@@ -10,6 +10,7 @@ module.exports = function (app, utils, models, auth) {
         res.render('index')
     })
 
+    app.post('/api/choduyetkh', ctrls['choduyetkh'].insert);
     Auth.load();
 
 
@@ -20,7 +21,7 @@ module.exports = function (app, utils, models, auth) {
         app.get('/api/' + name + '/:limit([0-9]+)/:page([0-9]+)', ctrls[name].list); // get list with page
         app.get('/api/' + name, ctrls[name].list); // get list with default page = 1
         app.get('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].get); // get by id
-        app.post('/api/' + name, ctrls[name].insert); // insert
+        if(name != 'choduyetkh') app.post('/api/' + name, ctrls[name].insert); // insert
         app.post('/api/' + name + '/search', ctrls[name].search); // search
        
         if(name != 'chitiethd' && name != 'chitietdh' && name != 'chitietnh') {

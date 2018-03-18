@@ -1,6 +1,6 @@
 module.exports = function(sequelize, Sequelize) {
     var choduyetkh = sequelize.define('choduyetkh', {
-        makh: {
+        maduyetkh: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true

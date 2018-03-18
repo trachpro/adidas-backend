@@ -7,11 +7,11 @@ module.exports = function(sequelize, Sequelize) {
         },
         masp: Sequelize.STRING,
         soluong: Sequelize.INTEGER,
-        trangweb: Sequelize.STRING,
-        giaweb: Sequelize.STRING,
-        trietkhau: Sequelize.STRING,
-        khoiluong: Sequelize.STRING,
-        tigia: Sequelize.STRING,
+        thuonghieu: Sequelize.STRING,
+        giaweb: Sequelize.DECIMAL,
+        trietkhau: Sequelize.FLOAT,
+        khoiluong: Sequelize.FLOAT,
+        tigia: Sequelize.INTEGER,
         giuhop: Sequelize.INTEGER,
         madh: Sequelize.INTEGER
     }, {

@@ -74,7 +74,7 @@ module.exports = function (trietkhau_model) {
                 return;
             }
             var params = convert(req.body);
-            trietkhau_model.update(params, { where: { matk: req.params.id } })
+            trietkhau_model.update(params, { where: { matg: req.params.id } })
                 .then((row) => {
                     if (row > 0) {
                         res.json({ "status": 1, "message": row + " row(s) updated" });
@@ -93,7 +93,7 @@ module.exports = function (trietkhau_model) {
                 return;
             }
             trietkhau_model.destroy({
-                where: { matk: req.params.id }
+                where: { matg: req.params.id }
             })
                 .then(rows => {
                     if (rows > 0)
@@ -110,7 +110,7 @@ module.exports = function (trietkhau_model) {
 
 function convert(src) {
 
-    var arr = ['matk', 'ngay', 'giatri'];
+    var arr = ['matg', 'ngay', 'giatri'];
     var des = {}
     arr.forEach(e => {
 

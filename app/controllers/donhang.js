@@ -76,24 +76,24 @@ module.exports = function (donhang_model) {
                 });
         },
         update: (req, res) => {
-            if(check.forTheOthers(req,res)) {
-
-                return;
-            }
-            console.log("request body: ", req.body);
-            var params = convert(req.body);
-            var data = {};
-            data.madh = req.params.id;
+            
+            var fields =  convert2(req.body);
+            
             if(req.decoded.maloainv != 1) {
-                data.makh = req.body.makh
-            }
-            donhang_model.update(params, { where: data })
+                
+                if(req.body.makh != req.decoded.makh) {
+                    
+                    res.json({status: 0, message: "invalid request"});
+                    return;
+                }
+            } else fields = {};
+            
+            var params = convert(req.body);
+            
+            donhang_model.update(params, fields ,{ where: {makh: req.body.makh} })
                 .then((row) => {
-                    if (row > 0) {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    } else {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    }
+                    
+                    res.json({ "status": 1, "message": row + " row(s) updated" });
                 }, error => {
 
                     res.json({status: 0, message: "query errors", content: error});
@@ -105,14 +105,12 @@ module.exports = function (donhang_model) {
                 res.json({ status: 0, message: "you are not allowed to access this method!" });
                 return;
             }
+            
             donhang_model.destroy({
                 where: { madh: req.params.id }
-            })
-                .then(rows => {
-                    if (rows > 0)
-                        res.json({ "status": 1, "message": rows + " row(s) affected" });
-                    else
-                        res.json({ "status": "300", "message": rows + " row(s) affected" });
+            }).then(rows => {
+                    
+                    res.json({ "status": 1, "message": rows + " row(s) affected" });
                 }, error => {
 
                     res.json({status: 0, message: "query errors", content: error});
@@ -123,7 +121,7 @@ module.exports = function (donhang_model) {
 
 function convert(src) {
 
-    var arr = ['madh', 'ngay', 'tienyen','datcoc','taikhoan','thuonghieu', 'tigia', 'trangthai', 'ghichu','macheck', 'makh', 'tendh'];
+    var arr = ['madh', 'ngay', 'tienyen','datcoc','taikhoan','thuonghieu', 'tigia', 'trangthai', 'ghichu','manh', 'makh', 'tendh','tongsl'];
     var des = {}
     arr.forEach(e => {
 
@@ -134,4 +132,21 @@ function convert(src) {
     });
     // des.maloainv =  1;
     return des;
+}
+
+function convert2(src) {
+
+    var arr = ['tienyen','datcoc', 'tigia', 'trangthai', 'ghichu'];
+    var des = { fields: []};
+    var flag = false;
+    arr.forEach(e => {
+
+        if (src[e]) {
+            
+            flag = true;
+            des.fields.push(e);
+        }
+    });
+    
+    return flag? des: null;
 }

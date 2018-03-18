@@ -5,9 +5,8 @@ module.exports = function(sequelize, Sequelize) {
         },
         madh: Sequelize.INTEGER,
         soluong: Sequelize.INTEGER,
-        phuphi: Sequelize.DECIMAL,
-        khoiluong: Sequelize.FLOAT,
-        ghichu: Sequelize.TEXT
+        giuhop: Sequelize.INTEGER,
+        khoiluong: Sequelize.FLOAT
     }, {
         freezeTableName: true,
         timestamps: false

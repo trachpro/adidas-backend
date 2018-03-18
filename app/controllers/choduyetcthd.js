@@ -32,7 +32,7 @@ module.exports = function (chitietdh_model, hoadon_model) {
             
             if(req.decoded.maloainv != 1) {
                 
-                if(!req.body.makh || req.body.makh != req.decoded.makh) {
+                if(req.body.makh && req.body.makh != req.decoded.makh) {
                     
                     res.json({status: 0, message: "invalid params"});
                     return;
@@ -50,62 +50,165 @@ module.exports = function (chitietdh_model, hoadon_model) {
         get: (req, res) => {
             res.json({status: 0, message: "query errors"});
         },
-        insert: (req, res) => {
+        insert:async (req, res) => {
             
-            if (req.decoded.maloainv != 1) {
+            let flag = false;
+            
+            if (req.decoded.maloainv == 1) {
 
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
+                flag = true;
+            }
+            
+            if(!flag) {
+                
+                if(!req.body.mahd) {
+                    
+                    res.json({status: 0, message: "invalid params"});
+                    return;
+                }
+                
+                await hoadon_model.findAll({where: {madh: req.body.mahd}}).then( bill => {
+                    
+                    if(bill[0]) {
+                        
+                        if(bill[0].makh && bill[0].makh == req.decoded.makh || bill[0].maduyetkh == req.decoded.maduyetkh) {
+                            
+                            flag = true;
+                        } else {
+                            
+                            flag = false;
+                        }
+                    } else {
+                        
+                        flag = false;
+                    }
+                })
             }
 
-            chitietdh_model.create(convert(req.body)).then(
-                (data) => {
-                    console.log("success ", data);
-                    res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
-                }, error => {
-
-                    res.json({status: 0, message: "query errors", content: error});
-                });
+            if(flag) {
+                
+                chitietdh_model.create(convert(req.body)).then(
+                    (data) => {
+                        console.log("success ", data);
+                        res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
+                    }, error => {
+    
+                        res.json({status: 0, message: "query errors", content: error});
+                    });
+            } else {
+                
+                res.json({status: 0, message: "you are not allowed to insert this!"});
+            }
+            
         },
-        update: (req, res) => {
-            if(check.forTheOthers(req,res)) {
-
-                return;
-            } 
-            var params = convert(req.body);
-            chitietdh_model.update(params, { where: {
+        update: async (req, res) => {
+            
+            let ob = {
                 mahd: req.params.id,
                 masp: req.params.id2
-            } })
-                .then((row) => {
-                    if (row > 0) {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    } else {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    }
-                });
-        },
-        delete: (req, res) => {
-            if (req.decoded.maloainv != 1) {
-
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
             }
-            chitietdh_model.destroy({
-                where: {
-                    mahd: req.params.id,
-                    masp: req.params.id2
-                }
-            })
-                .then(rows => {
-                    if (rows > 0)
-                        res.json({ "status": 1, "message": rows + " row(s) affected" });
-                    else
-                        res.json({ "status": "300", "message": rows + " row(s) affected" });
-                }, error => {
+            
+            let flag = false;
+            
+            if (req.decoded.maloainv == 1) {
 
-                    res.json({status: 0, message: "query errors", content: error});
-                });
+                flag = true;
+            }
+            
+            if(!flag) {
+                
+                if(!req.body.mahd) {
+                    
+                    res.json({status: 0, message: "invalid params"});
+                    return;
+                }
+                
+                await hoadon_model.findAll({where: {madh: req.body.mahd}}).then( bill => {
+                    
+                    if(bill[0]) {
+                        
+                        if(bill[0].makh && bill[0].makh == req.decoded.makh || bill[0].maduyetkh == req.decoded.maduyetkh) {
+                            
+                            flag = true;
+                        } else {
+                            
+                            flag = false;
+                        }
+                    } else {
+                        
+                        flag = false;
+                    }
+                })
+            }
+
+            if(flag) {
+                
+                var params = convert(req.body);
+                chitietdh_model.update(params, { where: ob })
+                    .then((row) => {
+                        
+                        res.json({ "status": 1, "message": row + " row(s) updated" });
+                    });
+            } else {
+                
+                res.json({status: 0, message: "you are not allowed to update this!"});
+            }
+        },
+        delete:async (req, res) => {
+            
+            let ob = {
+                mahd: req.params.id,
+                masp: req.params.id2
+            }
+            
+            let flag = false;
+            
+            if (req.decoded.maloainv == 1) {
+
+                flag = true;
+            }
+            
+            if(!flag) {
+                
+                if(!req.body.mahd) {
+                    
+                    res.json({status: 0, message: "invalid params"});
+                    return;
+                }
+                
+                await hoadon_model.findAll({where: {madh: req.body.mahd}}).then( bill => {
+                    
+                    if(bill[0]) {
+                        
+                        if(bill[0].makh && bill[0].makh == req.decoded.makh || bill[0].maduyetkh == req.decoded.maduyetkh) {
+                            
+                            flag = true;
+                        } else {
+                            
+                            flag = false;
+                        }
+                    } else {
+                        
+                        flag = false;
+                    }
+                })
+            }
+
+            if(flag) {
+                
+                var params = convert(req.body);
+                chitietdh_model.destroy(params, { where: ob })
+                    .then((row) => {
+                        
+                        res.json({ "status": 1, "message": row + " row(s) affected" });
+                    }, error => {
+    
+                        res.json({status: 0, message: "query errors", content: error});
+                    });
+            } else {
+                
+                res.json({status: 0, message: "you are not allowed to update this!"});
+            }
         }
     }
 }

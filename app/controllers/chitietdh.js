@@ -74,8 +74,9 @@ module.exports = function (chitietdh_model, donhang_model) {
                 });
         },
         update: (req, res) => {
-            if(check.forTheOthers(req,res)) {
+            if(req.decoded.maloainv != 1) {
 
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
                 return;
             } 
             var params = convert(req.body);
@@ -118,7 +119,7 @@ module.exports = function (chitietdh_model, donhang_model) {
 
 function convert(src) {
 
-    var arr = ['madh', 'masp', 'soluong'];
+    var arr = ['madh', 'masp', 'soluong','giuhop'];
     var des = {}
     arr.forEach(e => {
 

@@ -7,7 +7,7 @@ module.exports = function(sequelize, Sequelize) {
         },
         masp: Sequelize.STRING,
         soluong: Sequelize.INTEGER,
-        giaweb: Sequelize.STRING,
+        giaweb: Sequelize.DECIMAL,
         giuhop: Sequelize.INTEGER,
         thuonghieu: Sequelize.STRING
     }, {

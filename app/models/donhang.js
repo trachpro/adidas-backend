@@ -6,16 +6,17 @@ module.exports = function(sequelize, Sequelize) {
             primaryKey: true
         },
         ngay: Sequelize.STRING,
-        tienyen: Sequelize.STRING,
-        datcoc: Sequelize.STRING,
+        tienyen: Sequelize.DECIMAL,
+        datcoc: Sequelize.DECIMAL,
         taikhoan: Sequelize.STRING,
         thuonghieu: Sequelize.STRING,
-        tigia: Sequelize.STRING,
+        tigia: Sequelize.DECIMAL,
         trangthai: Sequelize.INTEGER,
         ghichu: Sequelize.TEXT,
-        macheck: Sequelize.INTEGER,
         makh: Sequelize.INTEGER,
-        tendh: Sequelize.STRING
+        tendh: Sequelize.STRING,
+        manh: Sequelize.INTEGER,
+        tongsl: Sequelize.INTEGER
     }, {
         freezeTableName: true,
         timestamps: false

@@ -21,8 +21,9 @@ module.exports = function (khachhang_model) {
             })
         },
         search: (req, res) => {
-            if(check.forTheOthers(req,res)) {
+            if (req.decoded.maloainv != 1) {
 
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
                 return;
             }
             var page = req.params.page ? parseInt(req.params.page) : 1;
@@ -38,8 +39,18 @@ module.exports = function (khachhang_model) {
             });
         },
         get: (req, res) => {
-            check.forGet(req,res);
+            
             const id = req.params.id;
+            
+            if(req.decoded.maloainv != 1) {
+                
+                if(req.decoded.maduyetkh && req.decoded.maduyetkh != id || req.decoded.makh && req.decoded.makh != id) {
+                    
+                    res.json({status: 0, message: "invalid request!"});
+                    return;
+                }
+            }
+            
             khachhang_model.findById(id).then((data) => {
                 res.json({ "status": 1, "message": "successful", "data": data.dataValues });
             }, error => {
@@ -48,14 +59,17 @@ module.exports = function (khachhang_model) {
             });
         },
         insert: (req, res) => {
-            if(check.forTheOthers(req,res)) {
-
+            
+            if(req.body.maloainv != 2 && req.body.maloainv != 3) {
+                
+                res.json({status: 0, message: "invalid request value"});
+                
                 return;
             }
-
+            
             khachhang_model.create(convert(req.body)).then(
                 (data) => {
-                    console.log("success ", data);
+                    
                     res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
                 }, error => {
 
@@ -63,19 +77,23 @@ module.exports = function (khachhang_model) {
                 });
         },
         update: (req, res) => {
-            if(check.forTheOthers(req,res)) {
-
-                return;
+            
+            let id = req.params.id;
+            
+            if(req.decoded.maloainv != 1) {
+                
+                if(req.decoded.maduyetkh && req.decoded.maduyetkh != id || req.decoded.makh && req.decoded.makh != id) {
+                    
+                    res.json({status: 0, message: "invalid request!"});
+                    return;
+                }
             }
-            console.log("request body: ", req.body);
+            
             var params = convert(req.body);
-            khachhang_model.update(params, { where: { makh: req.params.id } })
+            khachhang_model.update(params, { where: { maduyetkh: id } })
                 .then((row) => {
-                    if (row > 0) {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    } else {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    }
+                    
+                    res.json({ "status": 1, "message": row + " row(s) updated" });
                 }, error => {
 
                     res.json({status: 0, message: "query errors", content: error});
@@ -105,7 +123,7 @@ module.exports = function (khachhang_model) {
 
 function convert(src) {
 
-    var arr = ['makh', 'tenkh', 'sdt', 'diachi', 'mk', 'maloainv', 'email'];
+    var arr = ['maduyetkh', 'tenkh', 'sdt', 'diachi', 'mk', 'maloainv', 'email'];
     var des = {}
     arr.forEach(e => {
 

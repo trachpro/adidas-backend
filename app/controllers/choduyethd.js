@@ -39,7 +39,13 @@ module.exports = function (hoadon_model) {
             });
         },
         get: (req, res) => {
-            check.forGet(req,res);
+            
+            if (req.decoded.maloainv != 1) {
+
+                res.json({ status: 0, message: "you are not allowed to access this method!" });
+                return;
+            }
+            
             const id = req.params.id;
             hoadon_model.findById(id).then((data) => {
                 res.json({ "status": 1, "message": "successful", "data": data.dataValues });
@@ -49,15 +55,29 @@ module.exports = function (hoadon_model) {
             });
         },
         insert: (req, res) => {
-            if (req.decoded.maloainv != 1) {
-
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
+            
+            console.log("req.decoded: ", req.decoded);
+            
+            if(req.decoded.maloainv != 1) {
+                
+                var name = 'makh';
+                
+                req.decoded.maduyetkh? name = 'maduyetkh': ''; 
+                
+                if(req.decoded[name] != req.body[name] ) {
+                    
+                    res.json({status: 0, message: "invalid request"});
+                    return;
+                } else {
+                    
+                    req.body.makh = req.decoded.makh;
+                    req.body.maduyetkh = req.decoded.maduyetkh;
+                }
             }
 
             hoadon_model.create(convert(req.body)).then(
                 (data) => {
-                    console.log("success ", data);
+                    
                     res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
                 }, error => {
 
@@ -65,45 +85,52 @@ module.exports = function (hoadon_model) {
                 });
         },
         update: (req, res) => {
-            if(check.forTheOthers(req,res)) {
-
-                return;
-            }
-            var params = convert(req.body);
-            var data = {
-                mahd: req.params.id
-            };
-
+            
             if(req.decoded.maloainv != 1) {
-
-                data.mahd = req.body.makh;
+                
+                if(req.decoded.makh && req.decoded.makh != req.body.makh || req.decoded.maduyetkh && req.body.maduyetkh != req.decoded.maduyetkh) {
+                    
+                    res.json({status: 0, message: "invalid request"});
+                    return;
+                } else {
+                    
+                    req.body.makh = req.decoded.makh;
+                    req.body.maduyetkh = req.decoded.maduyetkh;
+                }
             }
+            
+            var params = convert(req.body);
+            
             hoadon_model.update(params, { where: { mahd: req.params.id } })
                 .then((row) => {
-                    if (row > 0) {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    } else {
-                        res.json({ "status": 1, "message": row + " row(s) updated" });
-                    }
+                    
+                    res.json({ "status": 1, "message": row + " row(s) updated" });
                 }, error => {
 
                     res.json({status: 0, message: "query errors", content: error});
                 });
         },
         delete: (req, res) => {
-            if (req.decoded.maloainv != 1) {
-
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
+            
+            let params = {};
+            
+            params.mahd = req.params.id;
+            
+            if(req.decoded.maloainv != 1) {
+                
+                if(req.decoded.makh) {
+                    
+                    params.makh = req.decoded.makh;
+                } else {
+                        
+                    params.maduyetkh = req.decoded.maduyetkh;
+                }
             }
-            hoadon_model.destroy({
-                where: { mahd: req.params.id }
-            })
+            
+            hoadon_model.destroy({ where: params})
                 .then(rows => {
-                    if (rows > 0)
-                        res.json({ "status": 1, "message": rows + " row(s) affected" });
-                    else
-                        res.json({ "status": "300", "message": rows + " row(s) affected" });
+                    
+                    res.json({ "status": 1, "message": rows + " row(s) affected" });
                 }, error => {
 
                     res.json({status: 0, message: "query errors", content: error});
@@ -114,7 +141,7 @@ module.exports = function (hoadon_model) {
 
 function convert(src) {
 
-    var arr = ['mahd','madh','ngay', 'ngaygiao', 'datcoc', 'trangthai', 'makh','macheck','ship'];
+    var arr = ['mahd','ngay', 'datcoc', 'makh','maduyetkh'];
     var des = {}
     arr.forEach(e => {
 

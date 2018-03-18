@@ -112,7 +112,7 @@ module.exports = function (chitietdh_model, hoadon_model) {
 
 function convert(src) {
 
-    var arr = ['mahd', 'masp', 'soluong', 'trangweb', 'giaweb','trietkhau','khoiluong','tigia', 'giuhop','madh'];
+    var arr = ['mahd', 'masp', 'soluong', 'thuonghieu', 'giaweb','trietkhau','khoiluong','tigia', 'giuhop','madh'];
     var des = {}
     arr.forEach(e => {
 
