@@ -5,13 +5,24 @@ module.exports = function(app, utils) {
     function login(uid, pass, callback) {
 
         var model = utils.loadModel('khachhang');
+        var model2 = utils.loadModel('choduyetkh');
 
         model.findAll({where: {sdt: uid, mk: pass}}).then((user) => {
 
             console.log(JSON.stringify(user));
             if(user[0] == null) {
 
-                callback(null);
+                model.findAll({where: {sdt: uid, mk: pass}}).then( cdUser => {
+
+                    if(cdUser[0]) {
+
+                        callback(cdUser[0]);
+                    } else{
+                        callback(null);
+                    }
+                }, error => {
+                    callback(null);
+                })
             } else if(uid == user[0].sdt && pass == user[0].mk) {
 
                 console.log("user :", user[0].dataValues);

@@ -51,6 +51,10 @@ module.exports = function(config, db) {
         models.hoadon.hasMany(models.chitiethd, {foreignKey: 'mahd'});
         models.chitietnh.belongsTo(models.chitietnh, {foreignKey: 'manh'});
         models.nhanhang.hasMany(models.chitietnh, {foreignKey: 'manh'});
+        models.hoadon.belongsTo(models.donhang, {foreignKey: 'madh'});
+        models.donhang.hasMany(models.hoadon, {foreignKey: 'madh'});
+        models.donhang.belongsTo(models.nhanhang, {foreignKey: 'manh'});
+        models.nhanhang.hasMany(models.donhang, {foreignKey: 'manh'});
 
         var ctrls = {};
 
