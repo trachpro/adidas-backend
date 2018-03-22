@@ -8,7 +8,7 @@ module.exports = function (donhang_model) {
                 res.json({ status: 0, message: "you are not allowed to access this method!" });
                 return;
             }
-            console.log("req body: ", req.body);
+            
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
             page = page < 1 ? 1 : page;
@@ -23,8 +23,11 @@ module.exports = function (donhang_model) {
         search: (req, res) => {
             if (req.decoded.maloainv != 1) {
 
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
+                if(req.decoded.makh != req.body.makh) {
+
+                    res.json({ status: 0, message: "you are not allowed to access this method!" });
+                    return;
+                }
             }
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
@@ -61,14 +64,16 @@ module.exports = function (donhang_model) {
         insert: (req, res) => {
             if (req.decoded.maloainv != 1) {
 
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
+                if(req.decoded.makh != req.body.makh) {
+
+                    res.json({ status: 0, message: "you are not allowed to access this method!" });
+                    return;
+                }
             }
-            console.log(req.body);
 
             donhang_model.create(convert(req.body)).then(
                 (data) => {
-                 
+                    
                     res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
                 }, error => {
 
@@ -119,7 +124,7 @@ module.exports = function (donhang_model) {
 
 function convert(src) {
 
-    var arr = ['manh', 'ngay', 'makh','phuphi','trangthai','khoiluong', 'dongia', 'ghichu','datcoc'];
+    var arr = ['manh', 'makh','tigia','khoiluong', 'dongia','phuphi'];
     var des = {}
     arr.forEach(e => {
 
@@ -128,21 +133,6 @@ function convert(src) {
             des[e] = src[e];
         }
     });
-    // des.maloainv =  1;
-    return des;
-}
-
-function convert2(src) {
-
-    var arr = ['trangthai', 'ghichu'];
-    var des = {}
-    arr.forEach(e => {
-
-        if (src[e]) {
-
-            des[e] = src[e];
-        }
-    });
-    // des.maloainv =  1;
+  
     return des;
 }

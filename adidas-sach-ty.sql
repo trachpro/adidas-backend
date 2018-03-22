@@ -73,6 +73,28 @@ create table donhang(
     constraint donhang_makh foreign key (makh) references khachhang (makh)
 );
 
+create table choduyetdh(
+    madh int primary key ,
+    tienyen decimal,
+    datcoc decimal,
+    tigia decimal,
+    makh int not null,
+
+    constraint choduyetdh_makh foreign key (makh) references khachhang (makh) on delete cascade
+);
+
+
+create table choduyetnh(
+    manh int primary key ,
+    khoiluong float,
+    dongia float,
+    tigia float,
+    phuphi decimal,
+    makh int not null,
+
+    constraint choduyetnh_makh foreign key (makh) references khachhang (makh) on delete cascade
+);
+
 create table chitietdh(
     madh int,
     masp varchar(10),

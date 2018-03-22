@@ -68,7 +68,7 @@ module.exports = function (donhang_model) {
 
             donhang_model.create(convert(req.body)).then(
                 (data) => {
-                    console.log("success ", data);
+                    
                     res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
                 }, error => {
 
@@ -128,15 +128,13 @@ function convert(src) {
             des[e] = src[e];
         }
     });
-    // des.maloainv =  1;
-    
-    console.log("update donhang: ", des);
+ 
     return des;
 }
 
 function convert2(src) {
 
-    var arr = ['tienyen','datcoc', 'tigia', 'trangthai', 'ghichu'];
+    var arr = ['trangthai', 'ghichu'];
     var des = {}
     arr.forEach(e => {
 

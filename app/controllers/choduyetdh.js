@@ -23,8 +23,11 @@ module.exports = function (donhang_model) {
         search: (req, res) => {
             if (req.decoded.maloainv != 1) {
 
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
+                if(req.decoded.makh != req.body.makh) {
+
+                    res.json({ status: 0, message: "you are not allowed to access this method!" });
+                    return;
+                }
             }
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
@@ -61,14 +64,16 @@ module.exports = function (donhang_model) {
         insert: (req, res) => {
             if (req.decoded.maloainv != 1) {
 
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
+                if(req.decoded.makh != req.body.makh) {
+
+                    res.json({ status: 0, message: "you are not allowed to access this method!" });
+                    return;
+                }
             }
-            console.log(req.body);
 
             donhang_model.create(convert(req.body)).then(
                 (data) => {
-                 
+                    
                     res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
                 }, error => {
 
@@ -84,11 +89,11 @@ module.exports = function (donhang_model) {
                     res.json({status: 0, message: "invalid request"});
                     return;
                 }
-            }
+            } 
             
-            var params = req.decoded.maloainv == 1? convert(req.body): convert2(req.body);
+            var params = convert(req.body);
             
-            donhang_model.update(params ,{ where: {manh: req.body.manh} })
+            donhang_model.update(params ,{ where: {madh: req.body.madh} })
                 .then((row) => {
                     
                     res.json({ "status": 1, "message": row + " row(s) updated" });
@@ -98,15 +103,15 @@ module.exports = function (donhang_model) {
                 });
         },
         delete: (req, res) => {
-            
             if (req.decoded.maloainv != 1) {
 
                 res.json({ status: 0, message: "you are not allowed to access this method!" });
                 return;
             }
             
-            donhang_model.destroy({ where: { manh: req.params.id }})
-                .then(rows => {
+            donhang_model.destroy({
+                where: { madh: req.params.id }
+            }).then(rows => {
                     
                     res.json({ "status": 1, "message": rows + " row(s) affected" });
                 }, error => {
@@ -119,30 +124,15 @@ module.exports = function (donhang_model) {
 
 function convert(src) {
 
-    var arr = ['manh', 'ngay', 'makh','phuphi','trangthai','khoiluong', 'dongia', 'ghichu','datcoc'];
+    var arr = ['madh', 'tienyen','datcoc', 'tigia', 'makh'];
     var des = {}
     arr.forEach(e => {
 
-        if (src[e]) {
-
+        if (src.hasOwnProperty(e)) {
+            if(!src[e]) src[e] = null;
             des[e] = src[e];
         }
     });
-    // des.maloainv =  1;
-    return des;
-}
 
-function convert2(src) {
-
-    var arr = ['trangthai', 'ghichu'];
-    var des = {}
-    arr.forEach(e => {
-
-        if (src[e]) {
-
-            des[e] = src[e];
-        }
-    });
-    // des.maloainv =  1;
     return des;
 }
