@@ -42,7 +42,7 @@ module.exports = function(app, utils) {
 
                     if(err) {
 
-                        res.json({status: 0, message: 'fail to authenticate token!' + err});
+                        res.json({status: 0, message: 'fail to authenticate token!' + err, relog: true});
                     } else {
 
                         req.decoded = decoded;
@@ -80,7 +80,10 @@ module.exports = function(app, utils) {
 
                     res.json({
                         status: 1,
-                        token: token
+                        token: token,
+                        makh: user.makh,
+                        maduyetkh: data.maduyetkh,
+                        maloainv: data.maloainv
                     })
                 } else {
 

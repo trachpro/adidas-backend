@@ -1,6 +1,6 @@
 var check = require('../lib/check');
 
-module.exports = function (khachhang_model) {
+module.exports = function (choduyetkh_model, khachhang_model) {
     return {
         list: (req, res) => {
             if (req.decoded.maloainv != 1) {
@@ -13,7 +13,7 @@ module.exports = function (khachhang_model) {
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
             page = page < 1 ? 1 : page;
             limit = limit < 1 || limit > 200 ? 10 : limit;
-            khachhang_model.findAll({ offset: (page - 1) * limit, limit: limit }).then(data => {
+            choduyetkh_model.findAll({ offset: (page - 1) * limit, limit: limit }).then(data => {
                 res.json(data || []);
             }, error => {
 
@@ -31,7 +31,7 @@ module.exports = function (khachhang_model) {
             page = page < 1 ? 1 : page;
             limit = limit < 1 || limit > 200 ? 10 : limit;
 
-            khachhang_model.findAll({ offset: (page - 1) * limit, limit: limit, where: convert(req.body) }).then((datas) => {
+            choduyetkh_model.findAll({ offset: (page - 1) * limit, limit: limit, where: convert(req.body) }).then((datas) => {
                 res.json(datas || [])
             }, error => {
 
@@ -51,7 +51,7 @@ module.exports = function (khachhang_model) {
                 }
             }
             
-            khachhang_model.findById(id).then((data) => {
+            choduyetkh_model.findById(id).then((data) => {
                 res.json({ "status": 1, "message": "successful", "data": data.dataValues });
             }, error => {
 
@@ -67,7 +67,7 @@ module.exports = function (khachhang_model) {
                 return;
             }
             
-            khachhang_model.create(convert(req.body)).then(
+            choduyetkh_model.create(convert(req.body)).then(
                 (data) => {
                     
                     res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
@@ -90,7 +90,7 @@ module.exports = function (khachhang_model) {
             }
             
             var params = convert(req.body);
-            khachhang_model.update(params, { where: { maduyetkh: id } })
+            choduyetkh_model.update(params, { where: { maduyetkh: id } })
                 .then((row) => {
                     
                     res.json({ "status": 1, "message": row + " row(s) updated" });
@@ -105,7 +105,7 @@ module.exports = function (khachhang_model) {
                 res.json({ status: 0, message: "you are not allowed to access this method!" });
                 return;
             }
-            khachhang_model.destroy({
+            choduyetkh_model.destroy({
                 where: { makh: req.params.id }
             })
                 .then(rows => {

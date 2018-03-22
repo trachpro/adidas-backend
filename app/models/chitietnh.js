@@ -1,9 +1,10 @@
 module.exports = function(sequelize, Sequelize) {
     var chitietnh = sequelize.define('chitietnh', {
         manh: {
-            type: Sequelize.INTEGER
+            type: Sequelize.INTEGER,
+            primaryKey: true
         },
-        madh: Sequelize.INTEGER,
+        madh: Sequelize.STRING,
         soluong: Sequelize.INTEGER,
         giuhop: Sequelize.INTEGER,
         khoiluong: Sequelize.FLOAT
@@ -11,6 +12,8 @@ module.exports = function(sequelize, Sequelize) {
         freezeTableName: true,
         timestamps: false
     });
+    
+    delete chitietnh.id;
 
     return chitietnh;
 }

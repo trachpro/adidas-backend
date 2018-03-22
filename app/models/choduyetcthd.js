@@ -1,5 +1,5 @@
 module.exports = function(sequelize, Sequelize) {
-    var chitiethd = sequelize.define('chitiethd', {
+    var choduyetcthd = sequelize.define('choduyetcthd', {
         mahd: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
@@ -15,5 +15,5 @@ module.exports = function(sequelize, Sequelize) {
         timestamps: false
     });
 
-    return chitiethd;
+    return choduyetcthd;
 }

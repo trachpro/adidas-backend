@@ -1,7 +1,7 @@
 module.exports = function(sequelize, Sequelize) {
     var donhang = sequelize.define('donhang', {
         madh: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
             autoIncrement: true,
             primaryKey: true
         },
@@ -14,9 +14,9 @@ module.exports = function(sequelize, Sequelize) {
         trangthai: Sequelize.INTEGER,
         ghichu: Sequelize.TEXT,
         makh: Sequelize.INTEGER,
-        tendh: Sequelize.STRING,
         manh: Sequelize.INTEGER,
-        tongsl: Sequelize.INTEGER
+        tongsl: Sequelize.INTEGER,
+        giuhop: Sequelize.INTEGER
     }, {
         freezeTableName: true,
         timestamps: false

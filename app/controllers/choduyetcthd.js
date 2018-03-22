@@ -32,14 +32,25 @@ module.exports = function (chitietdh_model, hoadon_model) {
             
             if(req.decoded.maloainv != 1) {
                 
-                if(req.body.makh && req.body.makh != req.decoded.makh) {
+                if(req.decoded.makh && req.body.makh != req.decoded.makh || req.decoded.maduyetkh && req.body.maduyetkh != req.decoded.maduyetkh) {
                     
                     res.json({status: 0, message: "invalid params"});
                     return;
                 }
             } 
             
-            hoadon_model.findAll({raw: true, offset: (page - 1) * limit, limit: limit,where: convert(req.body), include:[{model:chitietdh_model, required: false}]}).then((datas) => {
+            let params = convert(req.body);
+            
+            if(req.body.hasOwnProperty('makh')) {
+                
+                params.makh = req.body.makh;
+            }
+            if(req.body.hasOwnProperty('maduyetkh')) {
+                
+                params.maduyetkh = req.body.maduyetkh;
+            }
+            
+            hoadon_model.findAll({raw: true, offset: (page - 1) * limit, limit: limit,where: params, include:[{model:chitietdh_model, required: false}]}).then((datas) => {
                             
                 res.json(datas || []);
             }, error => {
@@ -67,7 +78,7 @@ module.exports = function (chitietdh_model, hoadon_model) {
                     return;
                 }
                 
-                await hoadon_model.findAll({where: {madh: req.body.mahd}}).then( bill => {
+                await hoadon_model.findAll({where: {mahd: req.body.mahd}}).then( bill => {
                     
                     if(bill[0]) {
                         

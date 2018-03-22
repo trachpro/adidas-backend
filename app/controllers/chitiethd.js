@@ -39,7 +39,21 @@ module.exports = function (chitietdh_model, hoadon_model) {
                 }
             } 
             
-            hoadon_model.findAll({raw: true, offset: (page - 1) * limit, limit: limit,where: convert(req.body), include:[{model:chitietdh_model, required: false}]}).then((datas) => {
+            let params = convert(req.body);
+            
+            if(req.body.hasOwnProperty('madh')) {
+                
+                params.madh = req.body.madh;
+                if(!params.madh) params.madh = null;
+            }
+            
+            if(req.body.hasOwnProperty('makh')) {
+                
+                params.makh = req.body.makh;
+            }
+            
+            
+            hoadon_model.findAll({raw: true, offset: (page - 1) * limit, limit: limit,where: params, include:[{model:chitietdh_model, required: false}]}).then((datas) => {
                             
                 res.json(datas || []);
             }, error => {
@@ -112,12 +126,12 @@ module.exports = function (chitietdh_model, hoadon_model) {
 
 function convert(src) {
 
-    var arr = ['mahd', 'masp', 'soluong', 'thuonghieu', 'giaweb','trietkhau','khoiluong','tigia', 'giuhop','madh'];
+    var arr = ['mahd', 'masp', 'soluong', 'thuonghieu', 'giaweb','trietkhau','khoiluong','tigia', 'giuhop'];
     var des = {}
     arr.forEach(e => {
 
-        if (src[e]) {
-
+        if (src.hasOwnProperty(e)) {
+            if(!src[e]) src[e] = null;
             des[e] = src[e];
         }
     });

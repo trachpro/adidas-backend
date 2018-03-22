@@ -5,13 +5,12 @@ module.exports = function(sequelize, Sequelize) {
             autoIncrement: true,
             primaryKey: true
         },
-        madh: Sequelize.INTEGER,
+        madh: Sequelize.STRING,
         ngay: Sequelize.STRING,
         ngaygiao: Sequelize.STRING,
         datcoc: Sequelize.DECIMAL,
         trangthai: Sequelize.INTEGER,
         makh: Sequelize.INTEGER,
-        macheck: Sequelize.INTEGER,
         ship: Sequelize.DECIMAL,
         thuonghieu: Sequelize.STRING
     }, {

@@ -1,7 +1,7 @@
 module.exports = function(sequelize, Sequelize) {
     var chitietdh = sequelize.define('chitietdh', {
         madh: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
             autoIncrement: true,
             primaryKey: true
         },

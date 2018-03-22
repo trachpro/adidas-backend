@@ -77,8 +77,6 @@ module.exports = function (donhang_model) {
         },
         update: (req, res) => {
             
-            var fields =  convert2(req.body);
-            
             if(req.decoded.maloainv != 1) {
                 
                 if(req.body.makh != req.decoded.makh) {
@@ -86,11 +84,11 @@ module.exports = function (donhang_model) {
                     res.json({status: 0, message: "invalid request"});
                     return;
                 }
-            } else fields = {};
+            }
             
-            var params = convert(req.body);
+            var params = req.decoded.maloainv == 1? convert(req.body): convert2(req.body);
             
-            donhang_model.update(params, fields ,{ where: {makh: req.body.makh} })
+            donhang_model.update(params ,{ where: {manh: req.body.manh} })
                 .then((row) => {
                     
                     res.json({ "status": 1, "message": row + " row(s) updated" });
@@ -137,16 +135,14 @@ function convert(src) {
 function convert2(src) {
 
     var arr = ['khoiluong','dongia', 'trangthai', 'ghichu'];
-    var des = { fields: []};
-    var flag = false;
+    var des = {}
     arr.forEach(e => {
 
         if (src[e]) {
-            
-            flag = true;
-            des.fields.push(e);
+
+            des[e] = src[e];
         }
     });
-    
-    return flag? des: {};
+    // des.maloainv =  1;
+    return des;
 }

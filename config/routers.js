@@ -9,6 +9,8 @@ module.exports = function (app, utils, models, auth) {
     app.get('/api', (req, res) => {
         res.render('index')
     })
+    
+    app.get('/api/khachhang/check/:sdt', ctrls['khachhang'].check );
 
     app.post('/api/choduyetkh', ctrls['choduyetkh'].insert);
     Auth.load();
@@ -20,16 +22,16 @@ module.exports = function (app, utils, models, auth) {
         console.log('Route /' + name + " completed.");
         app.get('/api/' + name + '/:limit([0-9]+)/:page([0-9]+)', ctrls[name].list); // get list with page
         app.get('/api/' + name, ctrls[name].list); // get list with default page = 1
-        app.get('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].get); // get by id
+        app.get('/api/' + name + '/:id', ctrls[name].get); // get by id
         if(name != 'choduyetkh') app.post('/api/' + name, ctrls[name].insert); // insert
         app.post('/api/' + name + '/search', ctrls[name].search); // search
        
         if(name != 'chitiethd' && name != 'chitietdh' && name != 'chitietnh') {
-            app.delete('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].delete); // delete
-            app.put('/api/' + name + '/:id([0-9a-f]+)', ctrls[name].update); // update
+            app.delete('/api/' + name + '/:id', ctrls[name].delete); // delete
+            app.put('/api/' + name + '/:id', ctrls[name].update); // update
         } else {
-            app.delete('/api/' + name + '/:id([0-9a-f]+)/:id2', ctrls[name].delete); // delete
-            app.put('/api/' + name + '/:id([0-9a-f]+)/:id2', ctrls[name].update); // update
+            app.delete('/api/' + name + '/:id/:id2', ctrls[name].delete); // delete
+            app.put('/api/' + name + '/:id/:id2', ctrls[name].update); // update
         }
     });
 

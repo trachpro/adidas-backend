@@ -1,7 +1,31 @@
 var check = require('../lib/check');
 
-module.exports = function (khachhang_model) {
+module.exports = function (khachhang_model, choduyetkh_model) {
     return {
+        check: (req, res) => {
+            var sdt = req.params.sdt;
+            
+            khachhang_model.findAll({where: {sdt: sdt}}).then(data => {
+                
+                if(data.length) {
+                    
+                    res.json({status: 0, message: "this phone is already existed!"});
+                } else {
+                    choduyetkh_model.findAll({where: {sdt: sdt}}).then( subData => {
+                        
+                        if(subData.length) {
+                            res.json({status: 0, message: "this phone is already existed!"});
+                        } else {
+                            
+                            res.json({status: 1, message: "valid"});
+                        }
+                    })
+                }
+            }, error => {
+                
+                console.log("error check: ");
+            })
+        },
         list: (req, res) => {
             if (req.decoded.maloainv != 1) {
 

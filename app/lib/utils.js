@@ -55,6 +55,8 @@ module.exports = function(config, db) {
         models.donhang.hasMany(models.hoadon, {foreignKey: 'madh'});
         models.donhang.belongsTo(models.nhanhang, {foreignKey: 'manh'});
         models.nhanhang.hasMany(models.donhang, {foreignKey: 'manh'});
+        models.choduyetcthd.belongsTo(models.choduyethd, {foreignKey: 'mahd'});
+        models.choduyethd.hasMany(models.choduyetcthd, {foreignKey: 'mahd'});
 
         var ctrls = {};
 
@@ -70,6 +72,10 @@ module.exports = function(config, db) {
                     case "chitietdh": subName = "donhang"; break;
                     case "chitiethd": subName = "hoadon"; break;
                     case "chitietnh": subName = "nhanhang"; break;
+                    case "donhang": subName = "nhanhang"; break;
+                    case "hoadon": subName = "donhang"; break;
+                    case "khachhang": subName = "choduyetkh"; break;
+                    case "choduyetcthd": subName = "choduyethd"; break;
                     default: subName = null;
                 }
                 

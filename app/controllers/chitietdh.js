@@ -40,7 +40,20 @@ module.exports = function (chitietdh_model, donhang_model) {
                 }
             } 
             
-            donhang_model.findAll({raw: true, offset: (page - 1) * limit, limit: limit,where: convert(req.body), include:[{model:chitietdh_model, required: false}]}).then((datas) => {
+            
+            let params = convert(req.body);
+            
+            if(req.body.hasOwnProperty('manh')){
+                
+                params.manh = req.body.manh;    
+            }
+            
+            if(req.body.hasOwnProperty('trangthai')) {
+                
+                params.trangthai = req.body.trangthai;
+            }
+            
+            donhang_model.findAll({raw: true, offset: (page - 1) * limit, limit: limit,where: params, include:[{model:chitietdh_model, required: false}]}).then((datas) => {
                             
                 res.json(datas || []);
             }, error => {
@@ -66,7 +79,7 @@ module.exports = function (chitietdh_model, donhang_model) {
             }
             chitietdh_model.create(convert(req.body)).then(
                 (data) => {
-                    console.log("success ", data);
+                    
                     res.json({ "status": 1, "message": "1 row(s) inserted", "data": data.dataValues });
                 }, error => {
 
@@ -83,8 +96,7 @@ module.exports = function (chitietdh_model, donhang_model) {
             chitietdh_model.update(params, { where: {
                 madh: req.params.id,
                 masp: req.params.id2
-            } })
-                .then((row) => {
+            } }).then((row) => {
                     
                     res.json({ "status": 1, "message": row + " row(s) updated" });
                 }, error => {
@@ -123,8 +135,8 @@ function convert(src) {
     var des = {}
     arr.forEach(e => {
 
-        if (src[e]) {
-
+        if (src.hasOwnProperty(e)) {
+            if(!src[e]) src[e] = null;
             des[e] = src[e];
         }
     });

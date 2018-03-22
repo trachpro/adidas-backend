@@ -12,8 +12,7 @@ module.exports = function(sequelize, Sequelize) {
         trietkhau: Sequelize.FLOAT,
         khoiluong: Sequelize.FLOAT,
         tigia: Sequelize.INTEGER,
-        giuhop: Sequelize.INTEGER,
-        madh: Sequelize.INTEGER
+        giuhop: Sequelize.INTEGER
     }, {
         freezeTableName: true,
         timestamps: false

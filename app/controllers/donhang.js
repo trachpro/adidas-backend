@@ -77,8 +77,6 @@ module.exports = function (donhang_model) {
         },
         update: (req, res) => {
             
-            var fields =  convert2(req.body);
-            
             if(req.decoded.maloainv != 1) {
                 
                 if(req.body.makh != req.decoded.makh) {
@@ -86,11 +84,11 @@ module.exports = function (donhang_model) {
                     res.json({status: 0, message: "invalid request"});
                     return;
                 }
-            } else fields = {};
+            } 
             
-            var params = convert(req.body);
+            var params = req.decoded.maloainv == 1? convert(req.body): convert2(req.body);
             
-            donhang_model.update(params, fields ,{ where: {makh: req.body.makh} })
+            donhang_model.update(params ,{ where: {madh: req.body.madh} })
                 .then((row) => {
                     
                     res.json({ "status": 1, "message": row + " row(s) updated" });
@@ -121,7 +119,24 @@ module.exports = function (donhang_model) {
 
 function convert(src) {
 
-    var arr = ['madh', 'ngay', 'tienyen','datcoc','taikhoan','thuonghieu', 'tigia', 'trangthai', 'ghichu','manh', 'makh', 'tendh','tongsl'];
+    var arr = ['madh', 'ngay', 'tienyen','datcoc','taikhoan','thuonghieu', 'tigia', 'trangthai', 'ghichu','manh', 'makh','tongsl','giuhop'];
+    var des = {}
+    arr.forEach(e => {
+
+        if (src.hasOwnProperty(e)) {
+            if(!src[e]) src[e] = null;
+            des[e] = src[e];
+        }
+    });
+    // des.maloainv =  1;
+    
+    console.log("update donhang: ", des);
+    return des;
+}
+
+function convert2(src) {
+
+    var arr = ['tienyen','datcoc', 'tigia', 'trangthai', 'ghichu'];
     var des = {}
     arr.forEach(e => {
 
@@ -132,21 +147,4 @@ function convert(src) {
     });
     // des.maloainv =  1;
     return des;
-}
-
-function convert2(src) {
-
-    var arr = ['tienyen','datcoc', 'tigia', 'trangthai', 'ghichu'];
-    var des = { fields: []};
-    var flag = false;
-    arr.forEach(e => {
-
-        if (src[e]) {
-            
-            flag = true;
-            des.fields.push(e);
-        }
-    });
-    
-    return flag? des: null;
 }
