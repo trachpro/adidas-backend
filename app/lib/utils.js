@@ -38,9 +38,9 @@ module.exports = function(config, db) {
         return require(CTRL_PATH + '/' + name);
     }
 
-    obj.loadControllerFromModel = function(name, model,subModel) {
+    obj.loadControllerFromModel = function(name, model,subModel, subSubModel) {
 
-        return subModel? require(CTRL_PATH + '/' + name)(model, subModel): require(CTRL_PATH + '/' + name)(model);
+        return subModel? require(CTRL_PATH + '/' + name)(model, subModel, subSubModel): require(CTRL_PATH + '/' + name)(model);
     }
 
     obj.loadControllers = function(models) {
@@ -57,6 +57,12 @@ module.exports = function(config, db) {
         models.nhanhang.hasMany(models.donhang, {foreignKey: 'manh'});
         models.choduyetcthd.belongsTo(models.choduyethd, {foreignKey: 'mahd'});
         models.choduyethd.hasMany(models.choduyetcthd, {foreignKey: 'mahd'});
+        models.choduyetdh.belongsTo(models.donhang, {foreignKey: 'madh'});
+        models.donhang.hasMany(models.choduyetdh, {foreignKey: 'madh'});
+        models.choduyetnh.belongsTo(models.nhanhang, {foreignKey: 'manh'});
+        models.nhanhang.hasMany(models.choduyetnh, {foreignKey: 'manh'});
+        models.chitietnh.belongsTo(models.chitietdh, {foreignKey: 'madh'});
+        models.chitietdh.hasMany(models.chitietnh, {foreignKey: 'madh'});
 
         var ctrls = {};
 
@@ -66,20 +72,23 @@ module.exports = function(config, db) {
 
                 var name = file.replace('.js','');
                 var subName = null;
+                var subName2 = null;
                 
                 switch(name) {
                     
                     case "chitietdh": subName = "donhang"; break;
                     case "chitiethd": subName = "hoadon"; break;
-                    case "chitietnh": subName = "nhanhang"; break;
+                    case "chitietnh": subName = "nhanhang"; subName2 = "chitietdh"; break;
                     case "donhang": subName = "nhanhang"; break;
                     case "hoadon": subName = "donhang"; break;
                     case "khachhang": subName = "choduyetkh"; break;
                     case "choduyetcthd": subName = "choduyethd"; break;
-                    default: subName = null;
+                    case "choduyetdh": subName = "donhang"; break;
+                    case "choduyetnh": subName = "nhanhang"; break;
+                    default: subName = null; subName2 = null;
                 }
                 
-                ctrls[name] = obj.loadControllerFromModel(name, models[name],models[subName]);
+                ctrls[name] = obj.loadControllerFromModel(name, models[name],models[subName],models[subName2]);
             }
         })
 

@@ -25,6 +25,7 @@ module.exports = function (chitietdh_model, donhang_model) {
             })
         },
         search: (req, res) => {
+            let params = convert(req.body);
             
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
@@ -38,10 +39,10 @@ module.exports = function (chitietdh_model, donhang_model) {
                     res.json({status: 0, message: "invalid params"});
                     return;
                 }
+                
+                params.makh = req.body.makh;
             } 
             
-            
-            let params = convert(req.body);
             
             if(req.body.hasOwnProperty('manh')){
                 

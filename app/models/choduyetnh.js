@@ -9,7 +9,8 @@ module.exports = function(sequelize, Sequelize) {
         phuphi: Sequelize.DECIMAL,
         khoiluong: Sequelize.FLOAT,
         dongia: Sequelize.INTEGER,
-        tigia: Sequelize.DECIMAL
+        tigia: Sequelize.DECIMAL,
+        ngay: Sequelize.STRING
     }, {
         freezeTableName: true,
         timestamps: false

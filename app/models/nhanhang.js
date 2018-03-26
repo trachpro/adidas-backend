@@ -6,13 +6,14 @@ module.exports = function(sequelize, Sequelize) {
             primaryKey: true
         },
         makh: Sequelize.INTEGER,
-        ngay: Sequelize.STRING,
+        ngay: Sequelize.DECIMAL,
         phuphi: Sequelize.DECIMAL,
         trangthai: Sequelize.INTEGER,
         khoiluong: Sequelize.FLOAT,
         dongia: Sequelize.INTEGER,
         ghichu: Sequelize.TEXT,
-        datcoc: Sequelize.DECIMAL
+        datcoc: Sequelize.DECIMAL,
+        ngaynhan: Sequelize.DECIMAL
     }, {
         freezeTableName: true,
         timestamps: false

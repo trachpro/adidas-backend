@@ -4,7 +4,10 @@ module.exports = function(sequelize, Sequelize) {
             type: Sequelize.INTEGER,
             primaryKey: true
         },
-        madh: Sequelize.STRING,
+        madh: {
+            type: Sequelize.INTEGER,
+            primaryKey: true
+        },
         soluong: Sequelize.INTEGER,
         giuhop: Sequelize.INTEGER,
         khoiluong: Sequelize.FLOAT

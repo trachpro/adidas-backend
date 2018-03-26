@@ -15,6 +15,8 @@ module.exports = function (app, utils, models, auth) {
     app.post('/api/choduyetkh', ctrls['choduyetkh'].insert);
     Auth.load();
 
+    app.post('/api/choduyetdh/getlist', ctrls['choduyetdh'].getlist);
+    app.post('/api/choduyetnh/getlist', ctrls['choduyetnh'].getlist);
 
     //set get default api
     names.forEach(function (name) {

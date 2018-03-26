@@ -119,7 +119,7 @@ module.exports = function (donhang_model) {
 
 function convert(src) {
 
-    var arr = ['manh', 'ngay', 'makh','phuphi','trangthai','khoiluong', 'dongia', 'ghichu','datcoc'];
+    var arr = ['manh', 'ngay', 'makh','phuphi','trangthai','khoiluong', 'dongia', 'ghichu','datcoc','ngaynhan'];
     var des = {}
     arr.forEach(e => {
 
@@ -138,8 +138,8 @@ function convert2(src) {
     var des = {}
     arr.forEach(e => {
 
-        if (src[e]) {
-
+        if (src.hasOwnProperty(e)) {
+            if(!src[e]) src[e] = null;
             des[e] = src[e];
         }
     });

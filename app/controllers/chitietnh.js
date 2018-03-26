@@ -1,7 +1,7 @@
 var check = require('../lib/check');
 
 
-module.exports = function (chitietnh_model, nhanhang_model) {
+module.exports = function (chitietnh_model, nhanhang_model,chitietdh_model) {
     return {
         list: (req, res) => {
 
@@ -11,7 +11,6 @@ module.exports = function (chitietnh_model, nhanhang_model) {
                 return;
             }
 
-            console.log("req body: ", req.body);
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
             page = page < 1 ? 1 : page;
@@ -24,6 +23,8 @@ module.exports = function (chitietnh_model, nhanhang_model) {
             })
         },
         search: (req, res) => {
+            
+            let params = convert(req.body);
 
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
@@ -37,9 +38,13 @@ module.exports = function (chitietnh_model, nhanhang_model) {
                     res.json({status: 0, message: "invalid params"});
                     return;
                 }
+                
+                params.makh = req.body.makh;
             } 
             
-            nhanhang_model.findAll({raw: true, offset: (page - 1) * limit, limit: limit,where: convert(req.body), include:[{model:chitietnh_model, required: false}]}).then((datas) => {
+            if(req.body.makh) params.makh = req.body.makh;
+            
+            nhanhang_model.findAll({raw: true, offset: (page - 1) * limit, limit: limit,where: params, include:[{model:chitietnh_model, required: false,include:[{model:chitietdh_model, required: false}]}]}).then((datas) => {
                             
                 res.json(datas || []);
             }, error => {
@@ -67,12 +72,34 @@ module.exports = function (chitietnh_model, nhanhang_model) {
                     res.json({status: 0, message: "query errors", content: error});
                 });
         },
-        update: (req, res) => {
-            if(check.forTheOthers(req,res)) {
-
-                return;
-            } 
+        update: async (req, res) => {
+            
+            let flag = true;
+            
             var params = convert(req.body);
+            
+            if(req.decoded.maloainv != 1) {
+
+                await nhanhang_model.findById(req.params.id).then( data => {
+                    
+                    if(data && data.dataValues.makh != req.decoded.makh) {
+                        
+                        res.json({ status: 0, message: "you are not allowed to access this method!" });
+                        flag = false;
+                        return;
+                    }
+                }, error => {
+                    
+                    res.json({ status: 0, message: "you are not allowed to access this method!" });
+                    flag = false;
+                    return;
+                })
+                
+                params = {khoiluong: params.khoiluong};
+            } 
+            
+            if(!flag) return;
+            
             chitietnh_model.update(params, { where: {
                 manh: req.params.id,
                 madh: req.params.id2

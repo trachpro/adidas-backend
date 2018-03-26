@@ -6,9 +6,9 @@ module.exports = function(sequelize, Sequelize) {
             primaryKey: true
         },
         ngay: Sequelize.STRING,
-        datcoc: Sequelize.DECIMAL,
         makh: Sequelize.INTEGER,
-        maduyetkh: Sequelize.INTEGER
+        maduyetkh: Sequelize.INTEGER,
+        thuonghieu: Sequelize.STRING
     }, {
         freezeTableName: true,
         timestamps: false

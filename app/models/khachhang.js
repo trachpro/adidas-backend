@@ -16,7 +16,8 @@ module.exports = function(sequelize, Sequelize) {
             type: Sequelize.INTEGER,
             allowNull: false
         },
-        email: Sequelize.STRING
+        email: Sequelize.STRING,
+        tigia: Sequelize.INTEGER
     }, {
         freezeTableName: true,
         timestamps: false

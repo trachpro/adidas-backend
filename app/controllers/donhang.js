@@ -21,11 +21,14 @@ module.exports = function (donhang_model) {
             })
         },
         search: (req, res) => {
-            if (req.decoded.maloainv != 1) {
-
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
-            }
+            if(req.decoded.maloainv != 1) {
+                
+                if(req.body.makh != req.decoded.makh) {
+                    
+                    res.json({status: 0, message: "invalid request"});
+                    return;
+                }
+            } 
             var page = req.params.page ? parseInt(req.params.page) : 1;
             var limit = req.params.limit ? parseInt(req.params.limit) : 100;
             page = page < 1 ? 1 : page;
@@ -45,14 +48,14 @@ module.exports = function (donhang_model) {
 
                 if(req.decoded.maloainv != 1) {
 
-                    if(data.dataValues.makh != req.decoded.makh) {
+                    if(data && data.dataValues.makh != req.decoded.makh) {
 
                         res.json({ status: 0, message: "you are not allowed to access this method!" });
                         return;
                     }
                 }
 
-                res.json({ "status": 1, "message": "successful", "data": data.dataValues });
+                res.json({ "status": 1, "message": "successful", "data": data?data.dataValues: null });
             }, error => {
 
                 res.json({status: 0, message: "query errors", content: error});

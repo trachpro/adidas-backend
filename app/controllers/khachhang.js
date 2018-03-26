@@ -97,13 +97,20 @@ module.exports = function (khachhang_model, choduyetkh_model) {
                 });
         },
         update: (req, res) => {
+            var params = convert(req.body);
+            
             if (req.decoded.maloainv != 1) {
 
-                res.json({ status: 0, message: "you are not allowed to access this method!" });
-                return;
+                if(req.decoded.makh != req.params.id) {
+                    
+                    res.json({ status: 0, message: "you are not allowed to access this method!" });
+                    return;
+                }
+                
+                params = {mk: req.body.mk};
             }
-            console.log("request body: ", req.body);
-            var params = convert(req.body);
+            
+            
             khachhang_model.update(params, { where: { makh: req.params.id } })
                 .then((row) => {
                     if (row > 0) {
@@ -126,10 +133,8 @@ module.exports = function (khachhang_model, choduyetkh_model) {
                 where: { makh: req.params.id }
             })
                 .then(rows => {
-                    if (rows > 0)
-                        res.json({ "status": 1, "message": rows + " row(s) affected" });
-                    else
-                        res.json({ "status": "300", "message": rows + " row(s) affected" });
+                    
+                    res.json({ "status": 1, "message": rows + " row(s) affected" });
                 }, error => {
 
                     res.json({status: 0, message: "query errors", content: error});
@@ -140,7 +145,7 @@ module.exports = function (khachhang_model, choduyetkh_model) {
 
 function convert(src) {
 
-    var arr = ['makh', 'tenkh', 'sdt', 'diachi', 'mk', 'maloainv', 'email'];
+    var arr = ['makh', 'tenkh', 'sdt', 'diachi', 'mk', 'maloainv', 'email','tigia'];
     var des = {}
     arr.forEach(e => {
 

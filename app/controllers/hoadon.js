@@ -123,7 +123,7 @@ module.exports = function (hoadon_model) {
 
 function convert(src) {
 
-    var arr = ['mahd','madh','ngay', 'ngaygiao', 'datcoc', 'trangthai', 'makh','ship', 'thuonghieu'];
+    var arr = ['mahd','madh','ngay', 'ngaygiao', 'datcoc', 'trangthai', 'makh','ship', 'thuonghieu','tigia','thanhtien','phuphi'];
     var des = {}
     arr.forEach(e => {
 

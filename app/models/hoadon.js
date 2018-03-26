@@ -12,7 +12,10 @@ module.exports = function(sequelize, Sequelize) {
         trangthai: Sequelize.INTEGER,
         makh: Sequelize.INTEGER,
         ship: Sequelize.DECIMAL,
-        thuonghieu: Sequelize.STRING
+        thuonghieu: Sequelize.STRING,
+        tigia: Sequelize.INTEGER,
+        thanhtien: Sequelize.DECIMAL,
+        phuphi: Sequelize.DECIMAL
     }, {
         freezeTableName: true,
         timestamps: false
