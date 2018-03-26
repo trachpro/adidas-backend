@@ -1,7 +1,7 @@
 var path = require('path'),
     rootPath = path.normalize(__dirname + '/..'),
-    env = process.env.NODE_ENV || 'development',
-    port = 8000
+    env = process.env.NODE_ENV || 'production',
+    port = 8080
 
 var config = {
     development: {
@@ -26,11 +26,12 @@ var config = {
         },
         port: port,
         dialect: 'mysql',
-        db: 'dbadidas',
+        db: 'bxjesqfs0',
         db_port: 3306,
-        user: 'root',
-        pass: ''
+        user: 'ukhhg3aenmu1wiyy',
+        pass: 'YnWdi6WsrqHFHgl9dcW'
     }
 };
 
+console.log("environ: ", process.env.NODE_ENV);
 module.exports = config[env];
