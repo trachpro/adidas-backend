@@ -1,7 +1,7 @@
 var config = require('../../config/index'),
     Sequelize = require('sequelize'),
     sequelize = new Sequelize(config.db, config.user, config.pass, {
-        host: "bxjesqfs0-mysql.services.clever-cloud.com",
+        host: config.host,
         dialect: config.dialect,
         port: config.db_port,
         // pool: {
