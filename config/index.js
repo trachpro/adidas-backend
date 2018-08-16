@@ -26,11 +26,11 @@ var config = {
         },
         port: port,
         dialect: 'mysql',
-        db: 'bievs8oos',
+        db: 'bh6wizgxt',
         db_port: 3306,
-        user: 'utjpy6hyoxp5ezee',
-        pass: 'kVPlnVu115hkqtJ8BIN',
-        host: 'bievs8oos-mysql.services.clever-cloud.com'
+        user: 'uttj6qm0aokmkfhf',
+        pass: 'fcEaYwSffEGlc6Ahqft',
+        host: 'bh6wizgxt-mysql.services.clever-cloud.com'
     }
 };
 

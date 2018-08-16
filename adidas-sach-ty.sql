@@ -183,3 +183,69 @@ insert into `hoadon` (`mahd`, `ngay`,`ngaygiao`, `makh`, `trangthai`, `datcoc`,`
 insert into `chitiethd` (`mahd`, `masp`, `soluong`, `trangweb`,`giaweb`,`trietkhau`,`khoiluong`,`tigia`,`macheck`,`makh`,`giuhop`,`madh`) values
 (1, "ECT123", 2, 'adidas', '5000','100', '3','216',2,2,1,1),
 (1, "TD-321", 4, 'adidas', '5000','100', '3','216',2,2,3,1); 
+
+
+select s.cid
+from Supply as s
+where not exists (
+    select * 
+    from Supply as s1
+    where s.cid = s1.cid
+    and exists (
+        select *
+        from Supply as s2
+        where s.cid <> s2.cid
+        and s1.pid = s2.pid
+        and s1.Price < s2.Price
+    )
+);
+
+select od.ProductID, c.CustomerID, sum(od.Quantity) as Quantity
+from orderdetail as od, `order` as o, customer as c
+where od.OrderID = o.OrderID
+    and o.CustomerID = c.CustomerID
+group by od.ProductID, c.CustomerID
+having Quantity >= all(
+    select sum(od.Quantity) as Quantity
+    from orderdetail as od, `order` as o, customer as c
+    where od.OrderID = o.OrderID
+        and o.CustomerID = c.CustomerID
+    group by od.ProductID, c.CustomerID
+);
+
+select result.City, max(result.sum_of_product)
+from (select c.City, sum(od.Quantity) as sum_of_product
+from orderdetail as od, `order` as o, customer as c
+where od.OrderID = o.OrderID
+    and o.CustomerID = c.CustomerID
+group by c.City
+order by sum_of_product desc) as result;
+
+select result.City, max(result.sum_of_money)
+from (select c.City, sum(od.Quantity * p.UnitPrice) as sum_of_money
+from orderdetail as od, `order` as o, customer as c, product as p
+where od.OrderID = o.OrderID
+    and o.CustomerID = c.CustomerID
+    and p.ProductID = od.ProductID
+group by c.City
+order by sum_of_money desc) as result;
+
+select concat(FirstName, ' ', LastName, ' : ', substr(Phone, length(Phone) - 3, 3)) as infor
+from customer;
+
+select r.CategoryName, max(r.sumOfQuantity)
+from (
+    select c.CategoryName, sum(od.Quantity) as sumOfQuantity
+    from category as c, product as p, orderdetail as od
+    where c.CategoryID = p.CategoryID
+        and p.ProductID = od.ProductID
+    group by c.CategoryID
+    order by sumOfQuantity desc    
+) as r;
+
+select o.OrderID, sum(od.Quantity * p.UnitPrice)
+from product as p, `order` as o, orderdetail as od
+where o.OrderID = od.OrderID
+    and od.ProductID = p.ProductID
+group by o.OrderID
+having (od.Quantity) * (p.UnitPrice) = cost/2;
